@@ -1,0 +1,97 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: "null"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    {{- if .Values.ingress.oauth.enabled }}
+    nginx.ingress.kubernetes.io/auth-response-headers: Authorization, X-Auth-Request-Email
+    nginx.ingress.kubernetes.io/auth-signin: https://$http_host/oauth2/start?rd=$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.ingress-nginx.svc.cluster.local:4180/oauth2/auth
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: proxy
+    {{- if .Values.ingress.oauth.enabled }}
+    oauth: required
+    {{- end }}
+  name: dkubex-proxy
+spec:
+  ingressClassName: "{{ .Values.ingress.className }}"
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: dkubex-proxy-ui
+            port:
+              number: 3000
+        path: /securegpt
+        pathType: Prefix
+    {{- if .Values.ingress.host }}
+    host: "{{ .Values.ingress.host }}"
+    {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: "null"
+    {{- if .Values.ingress.oauth.enabled }}
+    nginx.ingress.kubernetes.io/auth-response-headers: Authorization, X-Auth-Request-Email
+    nginx.ingress.kubernetes.io/auth-signin: https://$http_host/oauth2/start?rd=$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.ingress-nginx.svc.cluster.local:4180/oauth2/auth
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: chatbot
+    {{- if .Values.ingress.oauth.enabled }}
+    oauth: required
+    {{- end }}
+  name: dkubex-chatbot
+spec:
+  ingressClassName: "{{ .Values.ingress.className }}"
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: chatbot-ui
+            port:
+              number: 3004
+        path: /securechat
+        pathType: Prefix
+    {{- if .Values.ingress.host }}
+    host: "{{ .Values.ingress.host }}"
+    {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: "null"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app.kubernetes.io/name: proxy
+  name: dkubex-kong
+spec:
+  ingressClassName: "{{ .Values.ingress.className }}"
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: dkubex-supabase-kong
+            port:
+              number: 8000
+        path: /supabase(/|$)(.*)
+        pathType: Prefix
+    {{- if .Values.ingress.host }}
+    host: "{{ .Values.ingress.host }}"
+    {{- end }}
+---

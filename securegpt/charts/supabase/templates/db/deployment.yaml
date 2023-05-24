@@ -1,0 +1,121 @@
+{{- if .Values.db.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "supabase.db.fullname" . }}
+  labels:
+    {{- include "supabase.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.db.autoscaling.enabled }}
+  replicas: {{ .Values.db.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "supabase.db.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.db.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "supabase.db.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.db.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "supabase.db.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.db.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: init
+        image: bitnami/kubectl:1.25.9
+        securityContext:
+          runAsUser: 0
+        env:
+        - name: WIPE_DATA
+          value: "{{ .Values.global.wipedata }}"
+        command:
+        - bash
+        - -c
+        - |
+          set -e
+          if [[ "$WIPE_DATA" == "true" ]]; then
+              done=$(kubectl get cm -n dkubex supabase-db -ojsonpath='{.data.wipedata_done}')
+              if [[ "$done" != "true" ]]; then
+                  rm -rfv /mnt/postgresql/data/{..?*,.[!.]*,*}
+                  kubectl patch cm -n dkubex supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
+              fi
+          fi
+        volumeMounts:
+          {{- if .Values.global.persistence.enabled }}
+          - mountPath: "/mnt/postgresql/data"
+            name: postgres-volume
+            subPath: {{ .Values.global.persistence.nfs.path | trimPrefix "/" }}
+          {{- end }}
+      containers:
+        - name: {{ include "supabase.db.name" $ }}
+          securityContext:
+            {{- toYaml .Values.db.securityContext | nindent 12 }}
+          image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+          env:
+            {{- range $key, $value := .Values.db.environment }}
+            - name: {{ $key }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "supabase.db.fullname" $ }}
+                  key: {{ $key }}
+            {{- end }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.secretName }}
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.secretName }}
+                  key: password
+            - name: PGDATA
+              value: "/var/lib/postgresql/data"
+          ports:
+            - name: http
+              containerPort: 9999
+              protocol: TCP
+          volumeMounts:
+            {{- with .Values.db.volumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.global.persistence.enabled }}
+            - mountPath: "/var/lib/postgresql/data"
+              name: postgres-volume
+              subPath: {{ .Values.global.persistence.nfs.path | trimPrefix "/" }}
+            {{- end }}
+          {{- with .Values.db.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        {{- with .Values.db.volumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.global.persistence.enabled }}
+        - name: postgres-volume
+          persistentVolumeClaim:
+            claimName: secure-gpt
+        {{- end }}
+      {{- with .Values.db.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.db.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.db.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

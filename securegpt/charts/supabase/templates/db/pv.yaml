@@ -1,0 +1,21 @@
+{{- if .Values.global.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: secure-gpt
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 100Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: secure-gpt
+    namespace: {{ .Release.Namespace }}
+  nfs:
+    path: /
+    server: {{ .Values.global.persistence.nfs.server}}
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+{{- end }}

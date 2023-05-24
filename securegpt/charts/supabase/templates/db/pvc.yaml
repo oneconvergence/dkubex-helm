@@ -1,0 +1,15 @@
+{{- if .Values.global.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: secure-gpt
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100G
+  storageClassName: ""
+  volumeMode: Filesystem
+  volumeName: secure-gpt
+{{- end }}

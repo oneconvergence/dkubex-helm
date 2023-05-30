@@ -99,6 +99,13 @@ spec:
           value: "{{ .Values.sgptAdminUser }}"
         - name: SGPT_OPENAI_KEY
           value: "{{ .Values.sgptOpenaiKey }}"
+        startupProbe:
+          tcpSocket:
+            port: 8899
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 15
 
 ---
 

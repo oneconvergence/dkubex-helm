@@ -1,0 +1,38 @@
+# Default values for dkubex.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app_namespace: "d3x"
+image_tag: "brand_test"
+
+# Docker registry for installation
+registry:
+    # Format: registry/[repo]
+    name: "docker.io/dkubex123"
+
+    # Container registry username
+    username: ""
+
+    # Container registry password
+    password: ""
+
+# nfs or hostpath
+storage_type: "nfs"
+nfs:
+    # true for creating local nfs server
+    create_server: true
+    # Format: <server ip>:<path>
+    nfs_server: "kubernetes:/"
+    # specify host path for creating local nfs
+    storage_path: "/var/dkubex"
+hostpath:
+    # specify  host path 
+    storage_path: "/var/dkubex"
+# Format: dialect+driver://username:password@host:port/database
+database_url: ""
+image_pull_policy: "IfNotPresent"
+loadbalancer: false
+gpu_operator:
+   enabled: true     
+   driver: false
+   toolkit: false

@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "dkubex-uninstaller-hook"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: "dkubex-uninstaller-hook"
+    spec:
+      hostPID: true
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: dockerhub-secret
+      containers:
+      - name: dkubex-uninstaller-hook
+        image: dkubex123/d3x-installer:{{ .Values.image_tag }}
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        command: ["/bin/sh", "-c", " dxm uninstall -n {{ .Values.app_namespace }} \
+         {{ if and (eq .Values.storage_type "nfs") (eq .Values.nfs.create_server true) }}\
+         && dxm nfs uninstall \
+         {{ end }}\
+         {{ if eq .Values.gpu_operator.enabled true }} \
+          && dxm gpu uninstall \
+         {{ end }}\
+        "]
+      serviceAccountName: dkubex-deployer-sa
+

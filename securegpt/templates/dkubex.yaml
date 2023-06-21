@@ -91,6 +91,11 @@ spec:
             secretKeyRef:
               key: serviceKey
               name: dkubex-supabase-jwt
+        - name: SECURECHAT_APPKEY
+          valueFrom:
+            secretKeyRef:
+              key: appkey
+              name: securechat-appkey
         - name: SUPABASE_URL
           value: http://dkubex-supabase-kong:8000
         - name: SGPT_ADMIN_PASSWORD
@@ -149,6 +154,12 @@ spec:
         env:
         - name: OPENAI_API_HOST
           value: http://dkubex-proxy-backend:3005
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: appkey
+              name: securechat-appkey
+
 ---
 
 apiVersion: v1
@@ -163,5 +174,15 @@ spec:
     - protocol: TCP
       port: 3004
       targetPort: 3000
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "securechat-appkey"
+type: Opaque
+data:
+  appkey: {{ randAlphaNum 32 | lower | b64enc | quote }}
+
 ---
 

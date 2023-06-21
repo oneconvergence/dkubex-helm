@@ -37,6 +37,12 @@ spec:
          {{ if ne .Values.database_url "" }}\
          -d {.Values.database_url} \
          {{end}}\
+          {{ if eq .Values.datadog.enabled true }} \
+          -ds {{.Values.datadog.site}} -dk {{.Values.datadog.key}} \
+         {{ end }}\
+          {{ if eq .Values.fm.enabled false }} \
+          -nfm \
+         {{ end }}\
          -t {{ .Values.image_tag }} -i {{ .Values.image_pull_policy }} \
           {{ if eq .Values.loadbalancer true }}\
          -l \

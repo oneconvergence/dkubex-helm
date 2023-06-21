@@ -36,3 +36,10 @@ gpu_operator:
    enabled: true     
    driver: false
    toolkit: false
+   
+datadog:
+   enabled: false     
+   site: DATADOG_SITE
+   key: DATADOG_KEY 
+fm:
+    enabled: true

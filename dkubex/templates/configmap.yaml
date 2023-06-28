@@ -1,0 +1,9 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dkubex-config
+  namespace: {{ .Release.Namespace }}
+data: 
+  config.yaml: |
+    {{- toYaml $.Values | nindent 4 }}

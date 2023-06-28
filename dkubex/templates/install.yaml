@@ -21,32 +21,14 @@ spec:
           privileged: true
        
         command: ["/bin/sh", 
-        "-c", "\
-         {{ if eq .Values.gpu_operator.enabled true }} \
-         dxm gpu install -d {{.Values.gpu_operator.driver}} -t {{.Values.gpu_operator.toolkit}} && \
-         {{ end }}\
-         {{ if and (eq .Values.storage_type "nfs") (eq .Values.nfs.create_server true) }} \
-         dxm nfs install {{.Values.nfs.storage_path}} && \
-         {{ end }}\
-         dxm install -n {{ .Values.app_namespace }} --dev \
-         {{ if eq .Values.storage_type "nfs" }} \
-         -s {{ .Values.nfs.nfs_server }} \
-         {{ else }}\
-         -h {{.Values.hostpath.storage_path}} \
-         {{ end }}\
-         {{ if ne .Values.database_url "" }}\
-         -d {.Values.database_url} \
-         {{end}}\
-          {{ if eq .Values.datadog.enabled true }} \
-          -ds {{.Values.datadog.site}} -dk {{.Values.datadog.key}} \
-         {{ end }}\
-          {{ if eq .Values.fm.enabled false }} \
-          -nfm \
-         {{ end }}\
-         -t {{ .Values.image_tag }} -i {{ .Values.image_pull_policy }} \
-          {{ if eq .Values.loadbalancer true }}\
-         -l \
-         {{end}}\
-          "]
+        "-c", 
+        "dxm install-dkubex  /etc/config/config.yaml"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: dkubex-config
         
       serviceAccountName: dkubex-deployer-sa

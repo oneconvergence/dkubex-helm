@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "brand_test"
+image_tag: "0.6"
 
 # Docker registry for installation
 registry:
@@ -29,17 +29,56 @@ hostpath:
     # specify  host path 
     storage_path: "/var/dkubex"
 # Format: dialect+driver://username:password@host:port/database
+
+wipe_data: false #delete data from the storage
 database_url: ""
 image_pull_policy: "IfNotPresent"
 loadbalancer: false
+
+# enables gpu for dkubex
 gpu_operator:
    enabled: true     
-   driver: false
-   toolkit: false
-   
+   driver: false #install driver
+   toolkit: false #install toolkit
+
+# enables datadog  for dkubex   
 datadog:
    enabled: false     
    site: DATADOG_SITE
    key: DATADOG_KEY 
+
+# enables fm for dkubex
 fm:
     enabled: true
+
+#enables sssd integration with dkubex can use sssd/ldap/local_ldap
+sssd:
+    enabled: true
+    type: ldap #sssd/ldap
+    ldap_server: 
+        #create local ldap server for user management
+        enabled: true
+        auto_user_add: true #this will add authenticated user to the ldap if user doesnot exist. 
+
+    #if ldap_server is not enabled details for ldap and sssd
+    #details of Ad when type is sssd and ldap server is not enabled
+    ad: ""
+    bind_password: ""
+    ou: ""
+    bind_user: ""
+    #details of ldap when type is ldap and ldap server is not enabled 
+    ldap_url: ""
+    ladap_search_base: ""
+
+
+#enables Oauth for dkubex
+auth:
+    enabled: false
+    provider: "github" #okta/github
+    issuer_url: ""
+    client_id: ""
+    client_secret: ""
+    redirect_url: "" #https://<IP/DOMAIN_NAME>:32443/oauth2/callback
+    organisation: ""
+    email_domain: "*"
+

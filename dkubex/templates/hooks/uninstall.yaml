@@ -25,13 +25,13 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
-        command: ["/bin/sh", "-c", " dxm uninstall -n {{ .Values.app_namespace }} \
-         {{ if and (eq .Values.storage_type "nfs") (eq .Values.nfs.create_server true) }}\
-         && dxm nfs uninstall \
-         {{ end }}\
-         {{ if eq .Values.gpu_operator.enabled true }} \
-          && dxm gpu uninstall \
-         {{ end }}\
-        "]
+        command: ["/bin/sh", "-c", "dxm uninstall-dkubex /etc/config/config.yaml"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: dkubex-config
       serviceAccountName: dkubex-deployer-sa
 

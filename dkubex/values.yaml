@@ -28,9 +28,10 @@ nfs:
 hostpath:
     # specify  host path 
     storage_path: "/var/dkubex"
-# Format: dialect+driver://username:password@host:port/database
+
 
 wipe_data: false #delete data from the storage
+# Format: dialect+driver://username:password@host:port/database
 database_url: ""
 image_pull_policy: "IfNotPresent"
 loadbalancer: false

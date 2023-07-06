@@ -34,6 +34,9 @@ spec:
             {{- toYaml .Values.meta.securityContext | nindent 12 }}
           image: "{{ .Values.meta.image.repository }}:{{ .Values.meta.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.meta.image.pullPolicy }}
+          envFrom:
+          - secretRef:
+              name: {{ .Values.db.secretName }}
           env:
             {{- range $key, $value := .Values.meta.environment }}
             - name: {{ $key }}
@@ -42,16 +45,6 @@ spec:
                   name: {{ include "supabase.meta.fullname" $ }}
                   key: {{ $key }}
             {{- end }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: password
             - name: PG_META_DB_HOST
               value: $(DB_HOST)
             - name: PG_META_DB_PORT

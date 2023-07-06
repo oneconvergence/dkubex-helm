@@ -1,8 +1,9 @@
-{{- if .Values.global.persistence.enabled }}
+{{- if not .Values.global.db.externalDB }}
+{{- if .Values.global.db.internal.nfs.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: secure-gpt
+  name: securegpt
 spec:
   accessModes:
   - ReadWriteMany
@@ -11,5 +12,6 @@ spec:
       storage: 100G
   storageClassName: ""
   volumeMode: Filesystem
-  volumeName: secure-gpt
+  volumeName: securegpt
+{{- end }}
 {{- end }}

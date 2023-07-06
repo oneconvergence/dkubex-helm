@@ -1,10 +1,18 @@
 global:
-  wipedata: false
-  persistence:
-    enabled: false
-    nfs:
-      server: ""
-      path: ""
+  db:
+    wipedata: false
+    externalDB: true
+    external:
+      dbUser: ""
+      dbPassword: ""
+      dbHost: ""
+      dbPort: ""
+      dbName: ""
+    internal:
+      nfs:
+        enabled: false
+        server: ""
+        path: ""
 
 sgptAdminUser: "admin@dkubex.ai"
 sgptAdminPassword: ""
@@ -24,10 +32,10 @@ ingress:
 
 supabase:
   jwt:
-    secretName: "dkubex-supabase-jwt"
+    secretName: "supabase-jwt"
   
   smtp:
-    secretName: "dkubex-supabase-smtp"
+    secretName: "supabase-smtp"
   
   db:
     enabled: true
@@ -36,7 +44,7 @@ supabase:
       tag: 15.1.0.70
     imagePullSecrets:
     - name: dkube-dockerhub-secret
-    secretName: "dkubex-supabase-db"
+    secretName: "supabase-db"
     persistence:
       enabled: false
     storage:
@@ -53,7 +61,7 @@ supabase:
     environment:
       SUPABASE_URL: http://localhost
       SUPABASE_REST_URL: http://localhost/rest/v1/
-      STUDIO_PG_META_URL: http://dkubex-supabase-kong.dkubex.svc.cluster.local:8000/pg
+      STUDIO_PG_META_URL: http://supabase-kong.securegpt.svc.cluster.local:8000/pg
       SUPABASE_PUBLIC_URL: http://localhost/
     ingress:
       enabled: true
@@ -77,10 +85,6 @@ supabase:
     image:
       repo: v2.40.1
     environment:
-      DB_HOST: dkubex-supabase-db.dkubex.svc.cluster.local
-      DB_PORT: "5432"
-      DB_DRIVER: postgres
-      DB_NAME: postgres
       DB_SSL: allow
       GOTRUE_API_HOST: "0.0.0.0"
       GOTRUE_API_PORT: "9999"
@@ -109,10 +113,6 @@ supabase:
       repository: postgrest/postgrest
       tag: v10.1.2
     environment:
-      DB_HOST: dkubex-supabase-db.dkubex.svc.cluster.local
-      DB_PORT: "5432"
-      DB_DRIVER: postgres
-      DB_NAME: postgres
       DB_SSL: allow
       PGRST_DB_SCHEMA: public,storage
       PGRST_DB_ANON_ROLE: anon
@@ -123,9 +123,6 @@ supabase:
       repository: supabase/realtime
       tag: v2.1.0
     environment:
-      DB_HOST: dkubex-supabase-db.dkubex.svc.cluster.local
-      DB_PORT: "5432"
-      DB_NAME: postgres
       DB_SSL: "false"
       PORT: "4000"
       REPLICATION_MODE: RLS
@@ -143,10 +140,6 @@ supabase:
       DNS_NODES: "''"
   meta:
     environment:
-      DB_HOST: dkubex-supabase-db.dkubex.svc.cluster.local
-      DB_PORT: "5432"
-      DB_DRIVER: postgres
-      DB_NAME: postgres
       DB_SSL: disable
       PG_META_PORT: "8080"
   
@@ -155,12 +148,8 @@ supabase:
       repository: supabase/storage-api
       tag: v0.26.1
     environment:
-      DB_HOST: dkubex-supabase-db.dkubex.svc.cluster.local
-      DB_PORT: "5432"
-      DB_DRIVER: postgres
-      DB_NAME: postgres
       DB_SSL: disable
-      POSTGREST_URL: http://dkubex-supabase-rest.dkubex.svc.cluster.local:3000
+      POSTGREST_URL: http://supabase-rest.securegpt.svc.cluster.local:3000
       PGOPTIONS: -c search_path=storage,public
       FILE_SIZE_LIMIT: '52428800'
       STORAGE_BACKEND: file

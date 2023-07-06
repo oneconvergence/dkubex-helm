@@ -1,4 +1,4 @@
-{{- if .Values.db.enabled -}}
+{{- if not .Values.global.db.externalDB -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,24 +35,24 @@ spec:
           runAsUser: 0
         env:
         - name: WIPE_DATA
-          value: "{{ .Values.global.wipedata }}"
+          value: "{{ .Values.global.db.wipedata }}"
         command:
         - bash
         - -c
         - |
           set -e
           if [[ "$WIPE_DATA" == "true" ]]; then
-              done=$(kubectl get cm -n dkubex supabase-db -ojsonpath='{.data.wipedata_done}')
+              done=$(kubectl get cm -n {{ .Release.Namespace }} supabase-db -ojsonpath='{.data.wipedata_done}')
               if [[ "$done" != "true" ]]; then
                   rm -rfv /mnt/postgresql/data/{..?*,.[!.]*,*}
-                  kubectl patch cm -n dkubex supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
+                  kubectl patch cm -n {{ .Release.Namespace }} supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
               fi
           fi
         volumeMounts:
-          {{- if .Values.global.persistence.enabled }}
+          {{- if .Values.global.db.internal.nfs.enabled }}
           - mountPath: "/mnt/postgresql/data"
             name: postgres-volume
-            subPath: {{ .Values.global.persistence.nfs.path | trimPrefix "/" }}
+            subPath: {{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
           {{- end }}
       containers:
         - name: {{ include "supabase.db.name" $ }}
@@ -72,12 +72,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.db.secretName }}
-                  key: username
+                  key: DB_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.db.secretName }}
-                  key: password
+                  key: DB_PASSWORD
             - name: PGDATA
               value: "/var/lib/postgresql/data"
           ports:
@@ -88,10 +88,10 @@ spec:
             {{- with .Values.db.volumeMounts }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- if .Values.global.persistence.enabled }}
+            {{- if .Values.global.db.internal.nfs.enabled }}
             - mountPath: "/var/lib/postgresql/data"
               name: postgres-volume
-              subPath: {{ .Values.global.persistence.nfs.path | trimPrefix "/" }}
+              subPath: {{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
             {{- end }}
           {{- with .Values.db.resources }}
           resources:
@@ -101,10 +101,10 @@ spec:
         {{- with .Values.db.volumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-        {{- if .Values.global.persistence.enabled }}
+        {{- if .Values.global.db.internal.nfs.enabled }}
         - name: postgres-volume
           persistentVolumeClaim:
-            claimName: secure-gpt
+            claimName: securegpt
         {{- end }}
       {{- with .Values.db.nodeSelector }}
       nodeSelector:

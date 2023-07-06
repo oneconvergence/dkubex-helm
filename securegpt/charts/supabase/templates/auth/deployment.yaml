@@ -32,16 +32,9 @@ spec:
         - name: init-db
           image: postgres:15-alpine
           imagePullPolicy: IfNotPresent
-          env:
-            - name: DB_HOST
-              value: {{ .Values.auth.environment.DB_HOST | quote }}
-            - name: DB_PORT
-              value: {{ .Values.auth.environment.DB_PORT | quote }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: username
+          envFrom:
+          - secretRef:
+              name: {{ .Values.db.secretName }}
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -56,6 +49,9 @@ spec:
             {{- toYaml .Values.auth.securityContext | nindent 12 }}
           image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+          envFrom:
+          - secretRef:
+              name: {{ .Values.db.secretName }}
           env:
             {{- range $key, $value := .Values.auth.environment }}
             - name: {{ $key }}
@@ -64,16 +60,6 @@ spec:
                   name: {{ include "supabase.auth.fullname" $ }}
                   key: {{ $key }}
             {{- end }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: password
             - name: GOTRUE_DB_DATABASE_URL
               value: $(DB_DRIVER)://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?search_path=auth&sslmode=$(DB_SSL)
             - name: GOTRUE_DB_DRIVER

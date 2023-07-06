@@ -227,10 +227,6 @@ auth:
     type: ClusterIP
     port: 9999
   environment:
-    DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
-    DB_PORT: "5432"
-    DB_DRIVER: postgres
-    DB_NAME: postgres
     DB_SSL: allow # disable, allow, prefer, require, verify-ca, verify-full
     GOTRUE_API_HOST: "0.0.0.0"
     GOTRUE_API_PORT: "9999"
@@ -326,10 +322,6 @@ rest:
     type: ClusterIP
     port: 3000
   environment:
-    DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
-    DB_PORT: "5432"
-    DB_DRIVER: postgres
-    DB_NAME: postgres
     DB_SSL: allow # disable, allow, prefer, require, verify-ca, verify-full
     PGRST_DB_SCHEMA: public,storage
     PGRST_DB_ANON_ROLE: anon
@@ -407,9 +399,6 @@ realtime:
     type: ClusterIP
     port: 4000
   environment:
-    DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
-    DB_PORT: "5432"
-    DB_NAME: postgres
     DB_SSL: "false"
     PORT: "4000"
     REPLICATION_MODE: RLS
@@ -491,10 +480,6 @@ meta:
     type: ClusterIP
     port: 8080
   environment:
-    DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
-    DB_PORT: "5432"
-    DB_DRIVER: postgres
-    DB_NAME: postgres
     DB_SSL: allow # disable, allow, prefer, require, verify-ca, verify-full
     PG_META_PORT: "8080"
   ingress:
@@ -571,10 +556,6 @@ storage:
     type: ClusterIP
     port: 5000
   environment:
-    DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
-    DB_PORT: "5432"
-    DB_DRIVER: postgres
-    DB_NAME: postgres
     DB_SSL: allow # disable, allow, prefer, require, verify-ca, verify-full
     POSTGREST_URL: http://RELEASE_NAME-rest.NAMESPACE.svc.cluster.local:3000
     PGOPTIONS: -c search_path=storage,public

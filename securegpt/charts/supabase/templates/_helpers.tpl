@@ -60,3 +60,42 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Prepare db details
+*/}}
+{{- define "dbUser" -}}
+{{- if eq .Values.global.db.externalDB true }}
+{{- .Values.global.db.external.dbUser }}
+{{- else }}
+{{- "postgres" }}
+{{- end }}
+{{- end }}
+{{- define "dbPassword" -}}
+{{- if .Values.global.db.externalDB }}
+{{- .Values.global.db.external.dbPassword }}
+{{- else }}
+{{- randAlphaNum 8 }}
+{{- end }}
+{{- end }}
+{{- define "dbHost" -}}
+{{- if .Values.global.db.externalDB }}
+{{- .Values.global.db.external.dbHost }}
+{{- else }}
+{{- "supabase-db.securegpt.svc.cluster.local" }}
+{{- end }}
+{{- end }}
+{{- define "dbPort" -}}
+{{- if .Values.global.db.externalDB }}
+{{- .Values.global.db.external.dbPort }}
+{{- else }}
+{{- "5432" }}
+{{- end }}
+{{- end }}
+{{- define "dbName" -}}
+{{- if .Values.global.db.externalDB }}
+{{- .Values.global.db.external.dbName }}
+{{- else }}
+{{- "postgres" }}
+{{- end }}
+{{- end }}

@@ -88,6 +88,9 @@ spec:
       - name: main
         image: ocdr/securegpt-be:dkubex
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: {{ .Values.supabase.db.secretName }}
         env:
         - name: SUPABASE_SERVICE_ROLEKEY
           valueFrom:

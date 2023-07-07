@@ -40,8 +40,8 @@ supabase:
   db:
     enabled: true
     image:
-      repository: ocdr/supabase-postgres
-      tag: 15.1.0.70
+      repository: ocdr/postgres
+      tag: 15.2
     imagePullSecrets:
     - name: dkube-dockerhub-secret
     secretName: "supabase-db"

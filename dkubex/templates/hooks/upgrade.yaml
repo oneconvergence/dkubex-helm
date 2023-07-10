@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "dkubex-upgrade-hook"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: "dkubex-upgrade-hook"
+    spec:
+      hostPID: true
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: dockerhub-secret
+      containers:
+      - name: dkubex-upgrade-hook
+        image: dkubex123/d3x-installer:{{ .Values.image_tag }}
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        command: ["/bin/sh", "-c", "dxm upgrade-dkubex /etc/config/config.yaml"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: dkubex-config
+      serviceAccountName: dkubex-deployer-sa
+

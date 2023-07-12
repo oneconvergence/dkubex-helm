@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.6.2"
+image_tag: "0.6.3"
 
 # Docker registry for installation
 registry:
@@ -34,7 +34,9 @@ wipe_data: false #delete data from the storage
 # Format: dialect+driver://username:password@host:port/database
 database_url: ""
 image_pull_policy: "IfNotPresent"
-loadbalancer: false
+loadbalancer:
+    enabled: false
+    name: "dkubex"
 
 # enables gpu for dkubex
 gpu_operator:

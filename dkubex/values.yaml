@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.6.3"
+image_tag: "0.6.4"
 
 # Docker registry for installation
 registry:
@@ -25,10 +25,13 @@ nfs:
     nfs_server: "kubernetes:/"
     # specify host path for creating local nfs
     storage_path: "/var/dkubex"
+
 hostpath:
     # specify  host path 
     storage_path: "/var/dkubex"
 
+#specify the home_nfs_server if the user home is different 
+user_home_nfs_server: ""
 
 wipe_data: false #delete data from the storage
 # Format: dialect+driver://username:password@host:port/database
@@ -36,11 +39,19 @@ database_url: ""
 image_pull_policy: "IfNotPresent"
 loadbalancer:
     enabled: false
-    name: "dkubex"
+    eks:
+        name: "dkubex"
+        #aws cert arn
+        cert_arn : ""
+        cross_zone_lb: "false"
+        internal_lb: "false"
+
+# docker registry prifix
+reg_prefix : ""
 
 # enables gpu for dkubex
 gpu_operator:
-   enabled: true     
+   enabled: false     
    driver: false #install driver
    toolkit: false #install toolkit
 

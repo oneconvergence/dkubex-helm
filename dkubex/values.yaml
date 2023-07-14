@@ -43,8 +43,8 @@ loadbalancer:
         name: "dkubex"
         #aws cert arn
         cert_arn : ""
-        cross_zone_lb: "false"
-        internal_lb: "false"
+        cross_zone_lb: false
+        internal_lb: false
 
 # docker registry prifix
 reg_prefix : ""

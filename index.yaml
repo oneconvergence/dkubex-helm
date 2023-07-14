@@ -3,6 +3,16 @@ entries:
   dkubex:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-07-14T10:55:17.083543431+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 4eab0877bc9a511eb932f3caa181330c385b17e7dd79fa4b945ca78b7a411daf
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.8/dkubex-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-07-13T21:46:24.901423283+05:30"
     description: A Helm chart for Kubernetes
     digest: ec3f3f28d2f1c4c6e1afc1d438d815a78c34c6a9c077d2641f1aa6604cf66bfa
@@ -85,4 +95,4 @@ entries:
     urls:
     - https://github.com/oneconvergence/dkubex-helm/releases/download/securegpt-0.1/securegpt-0.1.tgz
     version: "0.1"
-generated: "2023-07-13T21:46:24.901442437+05:30"
+generated: "2023-07-14T10:55:17.083586143+05:30"

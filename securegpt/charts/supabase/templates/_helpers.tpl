@@ -68,14 +68,22 @@ Prepare db details
 {{- if eq .Values.global.db.externalDB true }}
 {{- .Values.global.db.external.dbUser }}
 {{- else }}
-{{- "postgres" }}
+{{- if .Values.global.db.internal.dbUser }}
+{{- .Values.global.db.internal.dbUser }}
+{{- else }}
+{{- "securegpt" }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- define "dbPassword" -}}
 {{- if .Values.global.db.externalDB }}
 {{- .Values.global.db.external.dbPassword }}
 {{- else }}
+{{- if .Values.global.db.internal.dbPassword }}
+{{- .Values.global.db.internal.dbPassword }}
+{{- else }}
 {{- randAlphaNum 8 }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- define "dbHost" -}}

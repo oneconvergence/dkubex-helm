@@ -4,7 +4,7 @@ data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
-  name: dkube-dockerhub-secret
+  name: securegpt-dockerhub-secret
 type: kubernetes.io/dockerconfigjson
 ---
 
@@ -25,10 +25,10 @@ spec:
         app: securegpt-fe
     spec:
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securegpt-dockerhub-secret
       containers:
       - name: main
-        image: ocdr/securegpt-fe:dkubex
+        image: dkubex123/securegpt-fe:dkubex
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -65,7 +65,36 @@ spec:
       targetPort: 3000
 
 ---
-
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: securegpt
+  namespace: securegpt
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: securegpt
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: securegpt
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: securegpt
+subjects:
+- kind: ServiceAccount
+  name: securegpt
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -82,11 +111,31 @@ spec:
       labels:
         app: securegpt-be
     spec:
+      serviceAccountName: securegpt
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securegpt-dockerhub-secret
+      initContainers:
+      - name: init
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          _done=$(kubectl get cm -n securegpt supabase-db -ojsonpath='{.data.db_migrate_done}')
+          if [ "$_done" = "true" ]; then
+              echo "Migration already done, skipping."
+              exit 0
+          fi
+          /opt/db/migrate.sh
+          kubectl patch cm -n securegpt supabase-db --type merge -p '{"data":{"db_migrate_done":"true"}}'
+        image: dkubex123/securegpt-be:sbr
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: ocdr/securegpt-be:dkubex
+        image: dkubex123/securegpt-be:sbr
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -152,10 +201,10 @@ spec:
         app: securechat
     spec:
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securegpt-dockerhub-secret
       containers:
       - name: main
-        image: ocdr/securechat:altos
+        image: dkubex123/securechat:altos
         imagePullPolicy: Always
         env:
         - name: OPENAI_API_HOST

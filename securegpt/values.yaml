@@ -9,6 +9,8 @@ global:
       dbPort: ""
       dbName: ""
     internal:
+      dbUser: ""
+      dbPassword: ""
       nfs:
         enabled: false
         server: ""
@@ -40,10 +42,10 @@ supabase:
   db:
     enabled: true
     image:
-      repository: ocdr/postgres
+      repository: dkubex123/postgres
       tag: 15.2
     imagePullSecrets:
-    - name: dkube-dockerhub-secret
+    - name: securegpt-dockerhub-secret
     secretName: "supabase-db"
     persistence:
       enabled: false
@@ -83,9 +85,11 @@ supabase:
   
   auth:
     image:
-      repo: v2.40.1
+      repository: supabase/gotrue
+      #tag: v2.40.1
+      tag: v2.82.4
     environment:
-      DB_SSL: allow
+      DB_SSL: prefer
       GOTRUE_API_HOST: "0.0.0.0"
       GOTRUE_API_PORT: "9999"
       GOTRUE_SITE_URL: http://studio.localhost
@@ -113,7 +117,7 @@ supabase:
       repository: postgrest/postgrest
       tag: v10.1.2
     environment:
-      DB_SSL: allow
+      DB_SSL: prefer
       PGRST_DB_SCHEMA: public,storage
       PGRST_DB_ANON_ROLE: anon
       PGRST_DB_USE_LEGACY_GUCS: "false"
@@ -140,7 +144,7 @@ supabase:
       DNS_NODES: "''"
   meta:
     environment:
-      DB_SSL: disable
+      DB_SSL: prefer
       PG_META_PORT: "8080"
   
   storage:
@@ -148,7 +152,7 @@ supabase:
       repository: supabase/storage-api
       tag: v0.26.1
     environment:
-      DB_SSL: disable
+      DB_SSL: prefer
       POSTGREST_URL: http://supabase-rest.securegpt.svc.cluster.local:3000
       PGOPTIONS: -c search_path=storage,public
       FILE_SIZE_LIMIT: '52428800'

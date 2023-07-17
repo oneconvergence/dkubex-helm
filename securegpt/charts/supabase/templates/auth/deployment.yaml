@@ -30,19 +30,26 @@ spec:
         {{- toYaml .Values.auth.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init-db
-          image: postgres:15-alpine
+          image: docker.io/bitnami/kubectl:1.25.9
           imagePullPolicy: IfNotPresent
           envFrom:
           - secretRef:
               name: {{ .Values.db.secretName }}
-          command: ["/bin/sh", "-c"]
+          command: ["/bin/bash", "-c"]
           args:
             - |
-              until pg_isready -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER); do
-              echo "Waiting for database to start..."
-              sleep 2
+              set -e
+              echo "Waiting for initial db migration, performed by securegpt backend..."
+              while true
+              do
+                  _done=$(kubectl get cm -n securegpt supabase-db -ojsonpath='{.data.db_migrate_done}')
+                  if [[ "$_done" != "true" ]]; then
+                      sleep 5
+                      continue
+                  fi
+                  break
               done
-            - echo "Database is ready"
+              echo "Done."
       containers:
         - name: {{ include "supabase.auth.name" $ }}
           securityContext:

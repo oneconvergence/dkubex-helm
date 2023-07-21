@@ -5,6 +5,9 @@
 app_namespace: "d3x"
 image_tag: "0.6.4"
 admin_password: "dkubex"
+provider : "dkubex" # dkubex/eks
+eks:
+    cluster_arn : "" 
 
 # Docker registry for installation
 registry:

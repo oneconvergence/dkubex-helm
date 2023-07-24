@@ -47,7 +47,10 @@ spec:
         - name: SUPABASE_URL
           value: http://supabase-kong:8000
         - name: DATABASE_URL
-          value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
+          {{- define "sslmode" }}
+          {{- if and .Values.global.db.externalDB .Values.global.db.external.dbSSL }}no-verify{{ else }}disable{{ end }}
+          {{- end }}
+          value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode={{ include "sslmode" . }}
 
 ---
 
@@ -63,37 +66,6 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: securegpt
-  namespace: securegpt
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: securegpt
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - "*"
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: securegpt
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: securegpt
-subjects:
-- kind: ServiceAccount
-  name: securegpt
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -111,31 +83,19 @@ spec:
       labels:
         app: securegpt-be
     spec:
-      serviceAccountName: securegpt
       imagePullSecrets:
       - name: securegpt-dockerhub-secret
       initContainers:
       - name: init
-        command:
-        - sh
-        - -c
-        - |
-          set -e
-          _done=$(kubectl get cm -n securegpt supabase-db -ojsonpath='{.data.db_migrate_done}')
-          if [ "$_done" = "true" ]; then
-              echo "Migration already done, skipping."
-              exit 0
-          fi
-          /opt/db/migrate.sh
-          kubectl patch cm -n securegpt supabase-db --type merge -p '{"data":{"db_migrate_done":"true"}}'
-        image: dkubex123/securegpt-be:sbr
+        command: ["/opt/db/migrate.sh"]
+        image: dkubex123/securegpt-be:dkubex
         imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: dkubex123/securegpt-be:sbr
+        image: dkubex123/securegpt-be:dkubex
         imagePullPolicy: Always
         envFrom:
         - secretRef:

@@ -42,8 +42,9 @@ spec:
               echo "Waiting for initial db migration, performed by securegpt backend..."
               while true
               do
-                  _done=$(kubectl get cm -n securegpt supabase-db -ojsonpath='{.data.db_migrate_done}')
-                  if [[ "$_done" != "true" ]]; then
+                  out=$(kubectl -n securegpt get po -l app=securegpt-be -ojsonpath='{.items[0].status.initContainerStatuses[0].state.terminated.exitCode}')
+                  init_ctr_code=$(echo "$out" | tr -d '[:space:]')
+                  if [[ "$init_ctr_code" == "" || $init_ctr_code -ne 0 ]]; then
                       sleep 5
                       continue
                   fi

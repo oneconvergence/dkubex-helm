@@ -18,7 +18,7 @@ metadata:
     {{- if .Values.ingress.oauth.enabled }}
     oauth: required
     {{- end }}
-  name: securegpt-be
+  name: securegpt-fe
 spec:
   ingressClassName: "{{ .Values.ingress.className }}"
   rules:

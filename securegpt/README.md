@@ -9,20 +9,20 @@ helm repo add dkubex-helm https://oneconvergence.github.io/dkubex-helm
 ##### Install with values.yaml
 1. Download values.yaml locally
 ```bash
-helm show values dkubex-helm/securegpt > values.yaml
+helm show values dkubex-helm/securellm > values.yaml
 ```
 2. Update with required details. 
 
 3. Run helm install with values.yaml
 ```bash
-helm install -f values.yaml <release-name> dkubex-helm/securegpt
+helm install -f values.yaml <release-name> dkubex-helm/securellm
 ```	
 
 ##### Install with --set option
 we can also use helm --set option to override input paramater values defined in values.yaml during install.
 ```bash
 
-helm install <release-name> dkubex-helm/securegpt \
+helm install <release-name> dkubex-helm/securellm \
 --set global.persistence.enabled=true \
 --set global.persistence.nfs.server="" \
 --set global.persistence.nfs.path="" \
@@ -42,14 +42,14 @@ helm status <release-name> -n dkubex
 ```
 
 ## Upgrade
-To upgrade dkubex/securegpt, please use the below command with the newly available version of dkubex/securegpt.
+To upgrade dkubex/securellm, please use the below command with the newly available version of dkubex/securellm.
 ```bash
 helm get values <deployed-release-name> --all  > values-upgrade.yaml
-helm upgrade -f values-upgrade.yaml <deployed-release-name> dkubex-helm/securegpt --set version=<new-version> --timeout 1500s
+helm upgrade -f values-upgrade.yaml <deployed-release-name> dkubex-helm/securellm --set version=<new-version> --timeout 1500s
 ```
 
 ## Uninstallation
-To uninstall dkubex/securegpt, please run below command:
+To uninstall dkubex/securellm, please run below command:
 ```bash
 helm uninstall <release-name>
 ```
@@ -60,8 +60,8 @@ Prerequisites- chart releaser(cr) tools (v1.2.1) and helm binary should be insta
 
 1. If building release with existing version then delete release and tag from github first.
 2. git checkout <new-release-branch>
-3. Change the chart version on Chart.yaml available in securegpt folder (incremental version based on last release)
-3. helm package securegpt --destination .deploy
+3. Change the chart version on Chart.yaml available in securellm folder (incremental version based on last release)
+3. helm package securellm --destination .deploy
 4. cr upload -o oneconvergence -r dkubex-helm -p .deploy --token <github-token>
 5. git checkout gh-pages
 6. cr index -i ./index.yaml -p .deploy --owner oneconvergence -r dkubex-helm -c https://oneconvergence.github.io/dkubex-helm

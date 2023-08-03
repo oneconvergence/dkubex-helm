@@ -71,7 +71,7 @@ Prepare db details
 {{- if .Values.global.db.internal.dbUser }}
 {{- .Values.global.db.internal.dbUser }}
 {{- else }}
-{{- "securegpt" }}
+{{- "securellm" }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -90,7 +90,7 @@ Prepare db details
 {{- if .Values.global.db.externalDB }}
 {{- .Values.global.db.external.dbHost }}
 {{- else }}
-{{- "supabase-db.securegpt.svc.cluster.local" }}
+{{- "supabase-db.securellm.svc.cluster.local" }}
 {{- end }}
 {{- end }}
 {{- define "dbPort" -}}

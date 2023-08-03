@@ -4,31 +4,31 @@ data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
-  name: securegpt-dockerhub-secret
+  name: securellm-dockerhub-secret
 type: kubernetes.io/dockerconfigjson
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: securegpt-fe
+  name: securellm-fe
   labels:
-    app: securegpt-fe
+    app: securellm-fe
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: securegpt-fe
+      app: securellm-fe
   template:
     metadata:
       labels:
-        app: securegpt-fe
+        app: securellm-fe
     spec:
       imagePullSecrets:
-      - name: securegpt-dockerhub-secret
+      - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: dkubex123/securegpt-fe:dkubex
+        image: dkubex123/securellm-fe:0.2
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -57,11 +57,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: securegpt-fe
+  name: securellm-fe
 spec:
   type: NodePort
   selector:
-    app: securegpt-fe
+    app: securellm-fe
   ports:
     - protocol: TCP
       port: 3000
@@ -70,32 +70,32 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: securegpt-be
+  name: securellm-be
   labels:
-    app: securegpt-be
+    app: securellm-be
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: securegpt-be
+      app: securellm-be
   template:
     metadata:
       labels:
-        app: securegpt-be
+        app: securellm-be
     spec:
       imagePullSecrets:
-      - name: securegpt-dockerhub-secret
+      - name: securellm-dockerhub-secret
       initContainers:
       - name: init
         command: ["/opt/db/migrate.sh"]
-        image: dkubex123/securegpt-be:dkubex
+        image: dkubex123/securellm-be:0.2
         imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: dkubex123/securegpt-be:dkubex
+        image: dkubex123/securellm-be:0.2
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -114,11 +114,11 @@ spec:
         - name: SUPABASE_URL
           value: http://supabase-kong:8000
         - name: SGPT_ADMIN_PASSWORD
-          value: "{{ .Values.sgptAdminPassword }}"
+          value: "{{ .Values.sllmAdminPassword }}"
         - name: SGPT_ADMIN_USER
-          value: "{{ .Values.sgptAdminUser }}"
+          value: "{{ .Values.sllmAdminUser }}"
         - name: SGPT_OPENAI_KEY
-          value: "{{ .Values.sgptOpenaiKey }}"
+          value: "{{ .Values.sllmOpenaiKey }}"
         startupProbe:
           tcpSocket:
             port: 8899
@@ -132,11 +132,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: securegpt-be
+  name: securellm-be
 spec:
   type: NodePort
   selector:
-    app: securegpt-be
+    app: securellm-be
   ports:
     - protocol: TCP
       port: 3005
@@ -161,14 +161,14 @@ spec:
         app: securechat
     spec:
       imagePullSecrets:
-      - name: securegpt-dockerhub-secret
+      - name: securellm-dockerhub-secret
       containers:
       - name: main
         image: dkubex123/securechat:altos
         imagePullPolicy: Always
         env:
         - name: OPENAI_API_HOST
-          value: http://securegpt-be:3005
+          value: http://securellm-be:3005
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:

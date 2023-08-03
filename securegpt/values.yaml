@@ -17,9 +17,9 @@ global:
         server: ""
         path: ""
 
-sgptAdminUser: "admin@dkubex.ai"
-sgptAdminPassword: ""
-sgptOpenaiKey: ""
+sllmAdminUser: "admin@dkubex.ai"
+sllmAdminPassword: ""
+sllmOpenaiKey: ""
 
 imageCredentials:
   registry: "https://index.docker.io/v1/"
@@ -46,7 +46,7 @@ supabase:
       repository: docker.io/postgres
       tag: 15.2
     imagePullSecrets:
-    - name: securegpt-dockerhub-secret
+    - name: securellm-dockerhub-secret
     secretName: "supabase-db"
     persistence:
       enabled: false

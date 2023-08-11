@@ -1,5 +1,5 @@
 # dkubex/SecureGPT
-Holds SecureGPT charts of DKubex product
+Holds SecureLLM charts of DKubex product
 
 ## Installation
 ##### Add dkubex-helm repo

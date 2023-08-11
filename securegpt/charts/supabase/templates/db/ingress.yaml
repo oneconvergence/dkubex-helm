@@ -1,4 +1,4 @@
-{{- if .Values.db.enabled -}}
+{{- if not .Values.global.db.externalDB -}}
 {{- if .Values.db.ingress.enabled -}}
 {{- $fullName := include "supabase.db.fullname" . -}}
 {{- $svcPort := .Values.db.service.port -}}

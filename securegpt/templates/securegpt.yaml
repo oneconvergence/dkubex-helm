@@ -4,106 +4,121 @@ data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
-  name: dkube-dockerhub-secret
+  name: securellm-dockerhub-secret
 type: kubernetes.io/dockerconfigjson
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dkubex-proxy-ui
+  name: securellm-fe
   labels:
-    app: dkubex-proxy-ui
+    app: securellm-fe
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dkubex-proxy-ui
+      app: securellm-fe
   template:
     metadata:
       labels:
-        app: dkubex-proxy-ui
+        app: securellm-fe
     spec:
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: ocdr/dkubex-proxy-ui:dkubex
+        image: dkubex123/securellm-fe:0.2
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: {{ .Values.supabase.db.secretName }}
         env:
         - name: NEXT_PUBLIC_SUPABASE_ANON_KEY
           valueFrom:
             secretKeyRef:
               key: anonKey
-              name: dkubex-supabase-jwt
+              name: supabase-jwt
         - name: SUPABASE_SERVICE_KEY
           valueFrom:
             secretKeyRef:
               key: serviceKey
-              name: dkubex-supabase-jwt
+              name: supabase-jwt
         - name: SUPABASE_URL
-          value: http://dkubex-supabase-kong:8000
+          value: http://supabase-kong:8000
         - name: DATABASE_URL
-          value: postgresql://postgres:example123456@dkubex-supabase-db:5432/postgres
+          {{- define "sslmode" }}
+          {{- if and .Values.global.db.externalDB .Values.global.db.external.dbSSL }}no-verify{{ else }}disable{{ end }}
+          {{- end }}
+          value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode={{ include "sslmode" . }}
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: dkubex-proxy-ui
+  name: securellm-fe
 spec:
   type: NodePort
   selector:
-    app: dkubex-proxy-ui
+    app: securellm-fe
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dkubex-proxy-backend
+  name: securellm-be
   labels:
-    app: dkubex-proxy-backend
+    app: securellm-be
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dkubex-proxy-backend
+      app: securellm-be
   template:
     metadata:
       labels:
-        app: dkubex-proxy-backend
+        app: securellm-be
     spec:
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securellm-dockerhub-secret
+      initContainers:
+      - name: init
+        command: ["/opt/db/migrate.sh"]
+        image: dkubex123/securellm-be:0.2
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: ocdr/llmproxy:dkubex
+        image: dkubex123/securellm-be:0.2
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: {{ .Values.supabase.db.secretName }}
         env:
         - name: SUPABASE_SERVICE_ROLEKEY
           valueFrom:
             secretKeyRef:
               key: serviceKey
-              name: dkubex-supabase-jwt
+              name: supabase-jwt
         - name: SECURECHAT_APPKEY
           valueFrom:
             secretKeyRef:
               key: appkey
               name: securechat-appkey
         - name: SUPABASE_URL
-          value: http://dkubex-supabase-kong:8000
+          value: http://supabase-kong:8000
         - name: SGPT_ADMIN_PASSWORD
-          value: "{{ .Values.sgptAdminPassword }}"
+          value: "{{ .Values.sllmAdminPassword }}"
         - name: SGPT_ADMIN_USER
-          value: "{{ .Values.sgptAdminUser }}"
+          value: "{{ .Values.sllmAdminUser }}"
         - name: SGPT_OPENAI_KEY
-          value: "{{ .Values.sgptOpenaiKey }}"
+          value: "{{ .Values.sllmOpenaiKey }}"
         startupProbe:
           tcpSocket:
             port: 8899
@@ -117,11 +132,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dkubex-proxy-backend
+  name: securellm-be
 spec:
   type: NodePort
   selector:
-    app: dkubex-proxy-backend
+    app: securellm-be
   ports:
     - protocol: TCP
       port: 3005
@@ -132,28 +147,28 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chatbot-ui
+  name: securechat
   labels:
-    app: chatbot-ui
+    app: securechat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chatbot-ui
+      app: securechat
   template:
     metadata:
       labels:
-        app: chatbot-ui
+        app: securechat
     spec:
       imagePullSecrets:
-      - name: dkube-dockerhub-secret
+      - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: ocdr/chatbot-ui:altos
+        image: dkubex123/securechat:altos
         imagePullPolicy: Always
         env:
         - name: OPENAI_API_HOST
-          value: http://dkubex-proxy-backend:3005
+          value: http://securellm-be:3005
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
@@ -165,11 +180,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chatbot-ui
+  name: securechat
 spec:
   type: NodePort
   selector:
-    app: chatbot-ui
+    app: securechat
   ports:
     - protocol: TCP
       port: 3004

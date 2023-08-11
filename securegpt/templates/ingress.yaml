@@ -18,7 +18,7 @@ metadata:
     {{- if .Values.ingress.oauth.enabled }}
     oauth: required
     {{- end }}
-  name: dkubex-proxy
+  name: securellm-fe
 spec:
   ingressClassName: "{{ .Values.ingress.className }}"
   rules:
@@ -26,10 +26,10 @@ spec:
       paths:
       - backend:
           service:
-            name: dkubex-proxy-ui
+            name: securellm-fe
             port:
               number: 3000
-        path: /securegpt
+        path: /securellm
         pathType: Prefix
     {{- if .Values.ingress.host }}
     host: "{{ .Values.ingress.host }}"
@@ -52,7 +52,7 @@ metadata:
     {{- if .Values.ingress.oauth.enabled }}
     oauth: required
     {{- end }}
-  name: dkubex-chatbot
+  name: securechat
 spec:
   ingressClassName: "{{ .Values.ingress.className }}"
   rules:
@@ -60,7 +60,7 @@ spec:
       paths:
       - backend:
           service:
-            name: chatbot-ui
+            name: securechat
             port:
               number: 3004
         path: /securechat
@@ -78,7 +78,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   labels:
     app.kubernetes.io/name: proxy
-  name: dkubex-kong
+  name: securellm-kong
 spec:
   ingressClassName: "{{ .Values.ingress.className }}"
   rules:
@@ -86,7 +86,7 @@ spec:
       paths:
       - backend:
           service:
-            name: dkubex-supabase-kong
+            name: supabase-kong
             port:
               number: 8000
         path: /supabase(/|$)(.*)

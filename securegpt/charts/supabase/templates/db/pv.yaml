@@ -1,8 +1,9 @@
-{{- if .Values.global.persistence.enabled }}
+{{- if not .Values.global.db.externalDB }}
+{{- if .Values.global.db.internal.nfs.enabled }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: secure-gpt
+  name: securellm
 spec:
   accessModes:
   - ReadWriteMany
@@ -11,11 +12,12 @@ spec:
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
-    name: secure-gpt
+    name: securellm
     namespace: {{ .Release.Namespace }}
   nfs:
     path: /
-    server: {{ .Values.global.persistence.nfs.server}}
+    server: {{ .Values.global.db.internal.nfs.server}}
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
+{{- end }}
 {{- end }}

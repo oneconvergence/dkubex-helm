@@ -30,32 +30,36 @@ spec:
         {{- toYaml .Values.auth.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init-db
-          image: postgres:15-alpine
+          image: docker.io/bitnami/kubectl:1.25.9
           imagePullPolicy: IfNotPresent
-          env:
-            - name: DB_HOST
-              value: {{ .Values.auth.environment.DB_HOST | quote }}
-            - name: DB_PORT
-              value: {{ .Values.auth.environment.DB_PORT | quote }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: username
-          command: ["/bin/sh", "-c"]
+          envFrom:
+          - secretRef:
+              name: {{ .Values.db.secretName }}
+          command: ["/bin/bash", "-c"]
           args:
             - |
-              until pg_isready -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER); do
-              echo "Waiting for database to start..."
-              sleep 2
+              set -e
+              echo "Waiting for initial db migration, performed by securellm backend..."
+              while true
+              do
+                  out=$(kubectl -n securellm get po -l app=securellm-be -ojsonpath='{.items[0].status.initContainerStatuses[0].state.terminated.exitCode}')
+                  init_ctr_code=$(echo "$out" | tr -d '[:space:]')
+                  if [[ "$init_ctr_code" == "" || $init_ctr_code -ne 0 ]]; then
+                      sleep 5
+                      continue
+                  fi
+                  break
               done
-            - echo "Database is ready"
+              echo "Done."
       containers:
         - name: {{ include "supabase.auth.name" $ }}
           securityContext:
             {{- toYaml .Values.auth.securityContext | nindent 12 }}
           image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+          envFrom:
+          - secretRef:
+              name: {{ .Values.db.secretName }}
           env:
             {{- range $key, $value := .Values.auth.environment }}
             - name: {{ $key }}
@@ -64,16 +68,6 @@ spec:
                   name: {{ include "supabase.auth.fullname" $ }}
                   key: {{ $key }}
             {{- end }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.db.secretName }}
-                  key: password
             - name: GOTRUE_DB_DATABASE_URL
               value: $(DB_DRIVER)://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?search_path=auth&sslmode=$(DB_SSL)
             - name: GOTRUE_DB_DRIVER

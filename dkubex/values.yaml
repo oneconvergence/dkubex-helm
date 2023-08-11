@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.6.4"
+image_tag: "0.7"
 admin_password: "dkubex"
 provider : "dkubex" # dkubex/eks
 eks:

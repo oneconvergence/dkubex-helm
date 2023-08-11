@@ -135,4 +135,18 @@ entries:
     urls:
     - https://github.com/oneconvergence/dkubex-helm/releases/download/securegpt-0.1/securegpt-0.1.tgz
     version: "0.1"
-generated: "2023-08-11T11:16:10.084409499+05:30"
+  securellm:
+  - apiVersion: v2
+    created: "2023-08-11T06:12:14.086686295Z"
+    dependencies:
+    - name: supabase
+      repository: ""
+      version: 0.0.3
+    description: Helm chart for installing SecureLLM Product.
+    digest: 51566ed6d24bdf727aca6f281ff36fa0eb3bcf022a84ab6869122e9f55857d94
+    name: securellm
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.2/securellm-0.2.tgz
+    version: "0.2"
+generated: "2023-08-11T06:12:14.086740921Z"

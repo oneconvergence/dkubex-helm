@@ -1,6 +1,6 @@
 apiVersion: v2
 name: securellm
-description: Helm chart for installing DKubex SecureGPT Product.
+description: Helm chart for installing SecureLLM Product.
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -7,7 +7,8 @@ image_tag: "0.6.4"
 admin_password: "dkubex"
 provider : "dkubex" # dkubex/eks
 eks:
-    cluster_arn : "" 
+    autoscaler_arn : ""
+    cluster_name: "" 
 
 # Docker registry for installation
 registry:
@@ -40,7 +41,7 @@ user_home_nfs_server: ""
 wipe_data: false #delete data from the storage
 # Format: dialect+driver://username:password@host:port/database
 database_url: ""
-image_pull_policy: "IfNotPresent"
+image_pull_policy: "Always"
 loadbalancer:
     enabled: false
     eks:

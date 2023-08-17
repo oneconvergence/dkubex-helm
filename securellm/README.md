@@ -1,5 +1,5 @@
 # dkubex/SecureLLM
-Holds SecureLLM charts of DKubex product
+Chart to install SecureLLM product.
 
 ## Installation
 ##### Add dkubex-helm repo
@@ -24,16 +24,16 @@ we can use helm --set option to override input paramater values defined in value
 
 helm install <release-name> dkubex-helm/securellm -n securellm --create-namespace \
 --set global.db.internal.nfs.enabled=true \
---set global.db.internal.nfs.server="replaceme" \
---set global.db.internal.nfs.path="replaceme" \
+--set global.db.internal.nfs.server=<nfsip> \
+--set global.db.internal.nfs.path=<nfspath> \
 --set sllmAdminUser="admin@dkubex.ai" \
---set sllmAdminPassword="replaceme" \
+--set sllmAdminPassword=<adminpasswd> \
 --set ingress.oauth.enabled=false \
 --set ingress.className="d3x" \
 --set imageCredentials.username="dkubex123" \
---set imageCredentials.password="replaceme" \
+--set imageCredentials.password=<crtoken> \
 --set global.db.wipedata=true \
---set sllmOpenaiKey="replaceme" \
+--set sllmOpenaiKey=<openaikey> \
 --version 0.2 --wait
 ```
 

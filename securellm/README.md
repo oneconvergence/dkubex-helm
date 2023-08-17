@@ -92,6 +92,10 @@ helm uninstall <release-name>
 ```bash
 Prerequisites- chart releaser(cr) tools (v1.2.1) and helm binary should be installed.
 
+0. Install chart releaser
+      wget https://github.com/helm/chart-releaser/releases/download/v1.2.1/chart-releaser_1.2.1_linux_amd64.tar.gz
+      tar -xf chart-releaser_1.2.1_linux_amd64.tar.gz
+      sudo mv cr /usr/local/bin/
 1. If building release with existing version then delete release and tag from github first.
 2. git checkout <new-release-branch>
 3. Change the chart version on Chart.yaml available in securellm folder (incremental version based on last release)

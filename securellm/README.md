@@ -1,4 +1,4 @@
-# dkubex/SecureLLM
+# SecureLLM
 Chart to install SecureLLM product.
 
 ## Installation
@@ -15,7 +15,7 @@ helm show values dkubex-helm/securellm > values.yaml
 
 3. Run helm install with values.yaml
 ```bash
-helm install -f values.yaml <release-name> dkubex-helm/securellm
+helm install -f values.yaml <release-name> -helm/securellm
 ```	
 
 ##### Basic Install with DKubex
@@ -39,7 +39,7 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 
 ##### check status
 ```bash
-helm status <release-name> -n dkubex
+helm status <release-name> -n securellm
 ```
 
 ##### Install with External Database
@@ -76,16 +76,16 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 
 
 ## Upgrade
-To upgrade dkubex/securellm, please use the below command with the newly available version of dkubex/securellm.
+To upgrade securellm, please use the below command with the newly available version of securellm.
 ```bash
 helm get values <deployed-release-name> --all  > values-upgrade.yaml
 helm upgrade -f values-upgrade.yaml <deployed-release-name> dkubex-helm/securellm --set version=<new-version> --timeout 1500s
 ```
 
 ## Uninstallation
-To uninstall dkubex/securellm, please run below command:
+To uninstall securellm, please run below command:
 ```bash
-helm uninstall <release-name>
+helm uninstall <release-name> -n securellm --wait --cascade=foreground
 ```
 
 ## Build chart and release to dkube-helm repo

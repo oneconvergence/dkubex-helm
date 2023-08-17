@@ -1,4 +1,4 @@
-# dkubex/SecureGPT
+# dkubex/SecureLLM
 Holds SecureLLM charts of DKubex product
 
 ## Installation

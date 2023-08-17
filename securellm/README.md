@@ -18,28 +18,62 @@ helm show values dkubex-helm/securellm > values.yaml
 helm install -f values.yaml <release-name> dkubex-helm/securellm
 ```	
 
-##### Install with --set option
-we can also use helm --set option to override input paramater values defined in values.yaml during install.
+##### Basic Install with DKubex
+we can use helm --set option to override input paramater values defined in values.yaml during install.
 ```bash
 
-helm install <release-name> dkubex-helm/securellm \
---set global.persistence.enabled=true \
---set global.persistence.nfs.server="" \
---set global.persistence.nfs.path="" \
---set dkubex_sgpt_pwd="" \
+helm install <release-name> dkubex-helm/securellm -n securellm --create-namespace \
+--set global.db.internal.nfs.enabled=true \
+--set global.db.internal.nfs.server="replaceme" \
+--set global.db.internal.nfs.path="replaceme" \
+--set sllmAdminUser="admin@dkubex.ai" \
+--set sllmAdminPassword="replaceme" \
 --set ingress.oauth.enabled=false \
---set ingress.className="" \
---set ingress.host="" \
---set imageCredentials.username="" \
---set imageCredentials.password="" \
---set global.wipedata=true \
---set openaikey=""
+--set ingress.className="d3x" \
+--set imageCredentials.username="dkubex123" \
+--set imageCredentials.password="replaceme" \
+--set global.db.wipedata=true \
+--set sllmOpenaiKey="replaceme" \
+--version 0.2 --wait
 ```
 
 ##### check status
 ```bash
 helm status <release-name> -n dkubex
 ```
+
+##### Install with External Database
+- `db.externalDB=true` :> To use external postgres databases like amazonRDS
+- Please see below command to see the other parameters that can be set for external DB.
+
+```bash
+
+helm install <release-name> dkubex-helm/securellm -n securellm --create-namespace \
+--set global.db.externalDB=true \
+--set global.db.external.dbUser=<dbuser> \
+--set global.db.external.dbPassword=<dbpassword> \
+--set global.db.external.dbHost=<dbhost> \
+--set global.db.external.dbPort=<dbport> \
+--set global.db.external.dbName=<dbname> \
+--set global.db.external.dbSSL=<if db needs ssl to access> \
+--set global.db.internal.dbUser=<dbuser> \
+--set global.db.internal.dbPassword=<dbpassword> \
+--set global.db.internal.nfs.enabled=true \
+--set global.db.internal.nfs.server=<nfsip> \
+--set global.db.internal.nfs.path=<nfspath> \
+--set sllmAdminUser="admin@dkubex.ai" \
+--set sllmAdminPassword=<admin-password> \
+--set ingress.oauth.enabled=true \
+--set ingress.className="d3x" \
+--set ingress.host="" \
+--set imageCredentials.username="dkubex123" \
+--set imageCredentials.password=<crtoken> \
+--set global.db.wipedata=true \
+--set sllmOpenaiKey=<oaikey> \
+--version 0.2 --wait
+
+```
+
 
 ## Upgrade
 To upgrade dkubex/securellm, please use the below command with the newly available version of dkubex/securellm.

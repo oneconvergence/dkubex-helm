@@ -59,7 +59,7 @@ kind: Service
 metadata:
   name: securellm-fe
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: securellm-fe
   ports:
@@ -134,7 +134,7 @@ kind: Service
 metadata:
   name: securellm-be
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: securellm-be
   ports:
@@ -182,7 +182,7 @@ kind: Service
 metadata:
   name: securechat
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: securechat
   ports:

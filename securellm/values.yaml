@@ -1,7 +1,7 @@
 global:
   db:
     wipedata: false
-    externalDB: true
+    externalDB: false
     external:
       dbUser: ""
       dbPassword: ""
@@ -97,7 +97,7 @@ supabase:
   
   kong:
     service:
-      type: NodePort
+      type: ClusterIP
     image:
       repository: kong
       tag: 2.8.1

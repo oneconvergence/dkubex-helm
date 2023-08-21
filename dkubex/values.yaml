@@ -107,7 +107,7 @@ mlfow:
     aws_access_key_id: ""
     aws_access_secret: ""
 flyte:
-    enabled: True
+    enabled: false
     accountNumber: #aws-account number
     accountRegion: #aws-region
     dbPassword: #dbPassword

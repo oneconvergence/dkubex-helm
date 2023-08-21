@@ -106,4 +106,12 @@ mlfow:
     artifacts_destination: ""
     aws_access_key_id: ""
     aws_access_secret: ""
+flyte:
+    enabled: True
+    accountNumber: #aws-account number
+    accountRegion: #aws-region
+    dbPassword: #dbPassword
+    rdsHost: #rds host on aws
+    bucketName: #s3bucket name
+    logGroup: #aws log group where you want flyte information to be logged
 

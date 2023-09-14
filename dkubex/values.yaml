@@ -101,7 +101,7 @@ auth:
     organisation: ""
     email_domain: "*"
 
-mlfow: 
+mlflow: 
     database_url: ""
     artifacts_destination: ""
     aws_access_key_id: ""
@@ -114,4 +114,5 @@ flyte:
     rdsHost: #rds host on aws
     bucketName: #s3bucket name
     logGroup: #aws log group where you want flyte information to be logged
-
+    docker_username: #docker registry username
+    docker_password: #docker registry password

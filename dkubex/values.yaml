@@ -110,9 +110,5 @@ flyte:
     enabled: false
     accountNumber: #aws-account number
     accountRegion: #aws-region
-    dbPassword: #dbPassword
-    rdsHost: #rds host on aws
     bucketName: #s3bucket name
-    logGroup: #aws log group where you want flyte information to be logged
-    docker_username: #docker registry username
-    docker_password: #docker registry password
+    d3xUrl: #external url to access d3x

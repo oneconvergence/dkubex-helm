@@ -41,10 +41,12 @@ spec:
         - -c
         - |
           set -e
+          path=/mnt/postgresql/data/{{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
+          mkdir -p $path
           if [[ "$WIPE_DATA" == "true" ]]; then
               done=$(kubectl get cm -n {{ .Release.Namespace }} supabase-db -ojsonpath='{.data.wipedata_done}')
               if [[ "$done" != "true" ]]; then
-                  rm -rfv /mnt/postgresql/data/{..?*,.[!.]*,*}
+                  rm -rfv $path/{..?*,.[!.]*,*}
                   kubectl patch cm -n {{ .Release.Namespace }} supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
               fi
           fi
@@ -52,7 +54,6 @@ spec:
           {{- if .Values.global.db.internal.nfs.enabled }}
           - mountPath: "/mnt/postgresql/data"
             name: postgres-volume
-            subPath: {{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
           {{- end }}
       containers:
         - name: {{ include "supabase.db.name" $ }}
@@ -79,7 +80,7 @@ spec:
                   name: {{ .Values.db.secretName }}
                   key: DB_PASSWORD
             - name: PGDATA
-              value: "/var/lib/postgresql/data"
+              value: /var/lib/postgresql/data/{{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
           ports:
             - name: http
               containerPort: 9999
@@ -91,7 +92,6 @@ spec:
             {{- if .Values.global.db.internal.nfs.enabled }}
             - mountPath: "/var/lib/postgresql/data"
               name: postgres-volume
-              subPath: {{ .Values.global.db.internal.nfs.path | trimPrefix "/" }}
             {{- end }}
           {{- with .Values.db.resources }}
           resources:

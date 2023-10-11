@@ -73,6 +73,10 @@ datadog:
 fm:
     enabled: true
 
+# enables kubeflow for dkubex
+kubeflow:
+    enabled: true
+
 #enables sssd integration with dkubex can use sssd/ldap/local_ldap
 sssd:
     enabled: true

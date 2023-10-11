@@ -49,6 +49,7 @@ loadbalancer:
         #aws cert arn
         cert_arn : ""
         cross_zone_lb: false
+        internal_lb: false
         scheme: ""
         subnets: ""
         tags: ""

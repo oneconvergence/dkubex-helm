@@ -119,3 +119,4 @@ flyte:
     accountRegion: #aws-region
     bucketName: #s3bucket name
     d3xUrl: #external url to access d3x
+node_selector_label: "node.kubernetes.io/instance-type"

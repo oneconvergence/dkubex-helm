@@ -97,16 +97,20 @@ sssd:
     ladap_search_base: ""
 
 
-#enables Oauth for dkubex
+#enables Oauth for dkubex, user can configure this from admin ui after installation too 
 auth:
     enabled: false
-    provider: "github" #okta/github
+    provider: "github" #okta/github/azure/adfs/keycloak
     issuer_url: ""
     client_id: ""
     client_secret: ""
     redirect_url: "" #https://<IP/DOMAIN_NAME>:32443/oauth2/callback
     organisation: ""
     email_domain: "*"
+    azure_tenant: "" #tenent id for azure ad
+    realm: "" # realm for keycload
+    allowed_role: "" #keycload allowed role name
+    allowed_group: "" # keycload allowed group name
 
 mlflow: 
     database_url: ""

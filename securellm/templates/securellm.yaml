@@ -51,6 +51,10 @@ spec:
           {{- if and .Values.global.db.externalDB .Values.global.db.external.dbSSL }}no-verify{{ else }}disable{{ end }}
           {{- end }}
           value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode={{ include "sslmode" . }}
+        - name: SLLM_USER
+          value: "{{ .Values.sllmUsername }}"
+        - name: SLLM_USER_PASSWORD
+          value: "{{ .Values.sllmUserPassword }}"
 
 ---
 
@@ -113,12 +117,16 @@ spec:
               name: securechat-appkey
         - name: SUPABASE_URL
           value: http://supabase-kong:8000
-        - name: SGPT_ADMIN_PASSWORD
+        - name: SLLM_ADMIN_PASSWORD
           value: "{{ .Values.sllmAdminPassword }}"
-        - name: SGPT_ADMIN_USER
+        - name: SLLM_ADMIN_USER
           value: "{{ .Values.sllmAdminUser }}"
-        - name: SGPT_OPENAI_KEY
+        - name: SLLM_OPENAI_KEY
           value: "{{ .Values.sllmOpenaiKey }}"
+        - name: SLLM_USER
+          value: "{{ .Values.sllmUsername }}"
+        - name: SLLM_USER_PASSWORD
+          value: "{{ .Values.sllmUserPassword }}"
         startupProbe:
           tcpSocket:
             port: 8899

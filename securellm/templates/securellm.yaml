@@ -28,7 +28,7 @@ spec:
       - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: dkubex123/securellm-fe:0.2
+        image: dkubex123/securellm-fe:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -92,14 +92,14 @@ spec:
       initContainers:
       - name: init
         command: ["/opt/db/migrate.sh"]
-        image: dkubex123/securellm-be:0.2
+        image: dkubex123/securellm-be:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: dkubex123/securellm-be:0.2
+        image: dkubex123/securellm-be:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:

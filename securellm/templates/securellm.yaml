@@ -52,9 +52,9 @@ spec:
           {{- end }}
           value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode={{ include "sslmode" . }}
         - name: SLLM_USER
-          value: "{{ .Values.sllmUsername }}"
+          value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
-          value: "{{ .Values.sllmUserPassword }}"
+          value: "{{ .Values.sllmAdminUser }}"
 
 ---
 
@@ -124,9 +124,9 @@ spec:
         - name: SLLM_OPENAI_KEY
           value: "{{ .Values.sllmOpenaiKey }}"
         - name: SLLM_USER
-          value: "{{ .Values.sllmUsername }}"
+          value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
-          value: "{{ .Values.sllmUserPassword }}"
+          value: "{{ .Values.sllmAdminUser }}"
         startupProbe:
           tcpSocket:
             port: 8899
@@ -198,14 +198,16 @@ spec:
       port: 3004
       targetPort: 3000
 ---
-
 apiVersion: v1
 kind: Secret
 metadata:
   name: "securechat-appkey"
 type: Opaque
 data:
+{{- if .Release.IsUpgrade }}
+  appkey: {{ (lookup "v1" "Secret" "securellm" "securechat-appkey").data.appkey }}
+{{- else }}
   appkey: {{ randAlphaNum 32 | lower | b64enc | quote }}
-
+{{- end }}
 ---
 

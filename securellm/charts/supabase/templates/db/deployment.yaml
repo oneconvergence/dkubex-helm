@@ -54,7 +54,7 @@ spec:
                   exit 1
               fi
               if [[ "$done" == "false" ]]; then
-                  rm -rfv /mnt/postgresql/data/{..?*,.[!.]*,*}
+                  rm -rfv $path/{..?*,.[!.]*,*}
                   kubectl patch cm -n {{ .Release.Namespace }} supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
               fi
           fi

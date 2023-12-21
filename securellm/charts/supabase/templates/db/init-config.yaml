@@ -1,8 +1,10 @@
-{{- if .Release.IsInstall }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: supabase-db
 data:
+{{- if .Release.IsUpgrade }}
+  wipedata_done: "{{ (lookup "v1" "ConfigMap" "securellm" "supabase-db").data.wipedata_done }}"
+{{- else }}
   wipedata_done: "false"
 {{- end }}

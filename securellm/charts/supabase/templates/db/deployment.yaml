@@ -43,7 +43,15 @@ spec:
           set -e
           if [[ "$WIPE_DATA" == "true" ]]; then
               done=$(kubectl get cm -n {{ .Release.Namespace }} supabase-db -ojsonpath='{.data.wipedata_done}')
-              if [[ "$done" != "true" ]]; then
+              if [[ $? -ne 0 ]]; then
+                  echo "Error in fetching configmap supabase-db: $done"
+                  exit 1
+              fi
+              if [[ "$done" != "false" ]] && [[ "$done" != "true" ]]; then
+                  echo "Invalid value in configmap supabase-db: $done"
+                  exit 1
+              fi
+              if [[ "$done" == "false" ]]; then
                   rm -rfv /mnt/postgresql/data/{..?*,.[!.]*,*}
                   kubectl patch cm -n {{ .Release.Namespace }} supabase-db --type merge -p '{"data":{"wipedata_done":"true"}}'
               fi

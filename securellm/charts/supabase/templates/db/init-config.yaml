@@ -1,6 +1,8 @@
+{{- if .Release.IsInstall }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: supabase-db
 data:
   wipedata_done: "false"
+{{- end }}

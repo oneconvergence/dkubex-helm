@@ -54,7 +54,7 @@ spec:
         - name: SLLM_USER
           value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
-          value: "{{ .Values.sllmAdminUser }}"
+          value: "{{ .Values.sllmAdminPassword }}"
 
 ---
 
@@ -126,7 +126,7 @@ spec:
         - name: SLLM_USER
           value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
-          value: "{{ .Values.sllmAdminUser }}"
+          value: "{{ .Values.sllmAdminPassword }}"
         startupProbe:
           tcpSocket:
             port: 8899

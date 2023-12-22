@@ -34,7 +34,7 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 --set imageCredentials.password=<crtoken> \
 --set global.db.wipedata=true \
 --set sllmOpenaiKey=<openaikey> \
---version 0.2 --wait
+--version 0.3 --wait
 ```
 
 ##### check status
@@ -70,16 +70,17 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 --set imageCredentials.password=<crtoken> \
 --set global.db.wipedata=true \
 --set sllmOpenaiKey=<oaikey> \
---version 0.2 --wait
+--version 0.3 --wait
 
 ```
 
 
 ## Upgrade
 To upgrade securellm, please use the below command with the newly available version of securellm.
+
+#### Upgrade securellm from version 0.2 to 0.3
 ```bash
-helm get values <deployed-release-name> --all  > values-upgrade.yaml
-helm upgrade -f values-upgrade.yaml <deployed-release-name> dkubex-helm/securellm --set version=<new-version> --timeout 1500s
+helm upgrade <release-name> dkubex-helm/securellm -n securellm --reuse-values --version 0.3 --wait
 ```
 
 ## Uninstallation

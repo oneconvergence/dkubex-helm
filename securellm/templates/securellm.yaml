@@ -28,7 +28,7 @@ spec:
       - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: dkubex123/securellm-fe:0.2
+        image: dkubex123/securellm-fe:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -51,6 +51,10 @@ spec:
           {{- if and .Values.global.db.externalDB .Values.global.db.external.dbSSL }}no-verify{{ else }}disable{{ end }}
           {{- end }}
           value: postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode={{ include "sslmode" . }}
+        - name: SLLM_USER
+          value: "user@dkubex.ai"
+        - name: SLLM_USER_PASSWORD
+          value: "{{ .Values.sllmAdminPassword }}"
 
 ---
 
@@ -88,14 +92,14 @@ spec:
       initContainers:
       - name: init
         command: ["/opt/db/migrate.sh"]
-        image: dkubex123/securellm-be:0.2
+        image: dkubex123/securellm-be:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: dkubex123/securellm-be:0.2
+        image: dkubex123/securellm-be:0.3
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -113,12 +117,16 @@ spec:
               name: securechat-appkey
         - name: SUPABASE_URL
           value: http://supabase-kong:8000
-        - name: SGPT_ADMIN_PASSWORD
+        - name: SLLM_ADMIN_PASSWORD
           value: "{{ .Values.sllmAdminPassword }}"
-        - name: SGPT_ADMIN_USER
+        - name: SLLM_ADMIN_USER
           value: "{{ .Values.sllmAdminUser }}"
-        - name: SGPT_OPENAI_KEY
+        - name: SLLM_OPENAI_KEY
           value: "{{ .Values.sllmOpenaiKey }}"
+        - name: SLLM_USER
+          value: "user@dkubex.ai"
+        - name: SLLM_USER_PASSWORD
+          value: "{{ .Values.sllmAdminPassword }}"
         startupProbe:
           tcpSocket:
             port: 8899
@@ -190,14 +198,16 @@ spec:
       port: 3004
       targetPort: 3000
 ---
-
 apiVersion: v1
 kind: Secret
 metadata:
   name: "securechat-appkey"
 type: Opaque
 data:
+{{- if .Release.IsUpgrade }}
+  appkey: {{ (lookup "v1" "Secret" "securellm" "securechat-appkey").data.appkey }}
+{{- else }}
   appkey: {{ randAlphaNum 32 | lower | b64enc | quote }}
-
+{{- end }}
 ---
 

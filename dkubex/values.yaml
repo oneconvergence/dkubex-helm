@@ -30,13 +30,16 @@ nfs:
     nfs_server: "kubernetes:/"
     # specify host path for creating local nfs
     storage_path: "/var/dkubex"
-
+    # specify nfs version supported are 4.1 and 4.0
+    version: "4.1"
 hostpath:
     # specify  host path 
     storage_path: "/var/dkubex"
 
 #specify the home_nfs_server if the user home is different 
 user_home_nfs_server: ""
+# specify nfs version for user home supported are 4.1 and 4.0
+user_home_nfs_server_version: "4.1"
 
 wipe_data: false #delete data from the storage
 # Format: dialect+driver://username:password@host:port/database
@@ -72,6 +75,10 @@ datadog:
 # enables fm for dkubex
 fm:
     enabled: true
+    s3:
+        bucket_name: ""
+        aws_access_key_id: ""
+        aws_access_secret: ""
 
 # enables kubeflow for dkubex
 kubeflow:

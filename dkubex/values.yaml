@@ -76,7 +76,9 @@ datadog:
 fm:
     enabled: true
     s3:
+        enabled : false
         bucket_name: ""
+        weaviate_backup_path: ""
         aws_access_key_id: ""
         aws_access_secret: ""
 
@@ -132,3 +134,4 @@ flyte:
     d3xUrl: #external url to access d3x
     cert_arn : ""
 node_selector_label: "node.kubernetes.io/instance-type"
+pod_security_enforce: ""

@@ -69,8 +69,8 @@ gpu_operator:
 # enables datadog  for dkubex   
 datadog:
    enabled: false     
-   site: DATADOG_SITE
-   key: DATADOG_KEY 
+   site: ""                #Datadog site 
+   key: ""                 #datadog key
 
 # enables fm for dkubex
 fm:

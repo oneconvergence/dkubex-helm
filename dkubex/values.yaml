@@ -71,6 +71,7 @@ datadog:
    enabled: false     
    site: ""                #Datadog site 
    key: ""                 #datadog key
+   cluster_name: ""        #Set a unique cluster name to allow scoping hosts and Cluster Checks easily 
 
 # enables fm for dkubex
 fm:

@@ -34,7 +34,7 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 --set imageCredentials.password=<crtoken> \
 --set global.db.wipedata=true \
 --set sllmOpenaiKey=<openaikey> \
---version 0.3 --wait
+--version 0.4 --wait
 ```
 
 ##### check status
@@ -70,7 +70,7 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 --set imageCredentials.password=<crtoken> \
 --set global.db.wipedata=true \
 --set sllmOpenaiKey=<oaikey> \
---version 0.3 --wait
+--version 0.4 --wait
 
 ```
 

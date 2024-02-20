@@ -78,9 +78,9 @@ helm install <release-name> dkubex-helm/securellm -n securellm --create-namespac
 ## Upgrade
 To upgrade securellm, please use the below command with the newly available version of securellm.
 
-#### Upgrade securellm from version 0.2 to 0.3
+#### Upgrade securellm from version 0.3 to 0.4
 ```bash
-helm upgrade <release-name> dkubex-helm/securellm -n securellm --reuse-values --version 0.3 --wait
+helm upgrade <release-name> dkubex-helm/securellm -n securellm --reuse-values --version 0.4 --wait
 ```
 
 ## Uninstallation

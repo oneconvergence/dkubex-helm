@@ -24,12 +24,16 @@ registry:
 # nfs or hostpath
 storage_type: "nfs"
 nfs:
-    # true for creating local nfs server
+    # true for creating internal nfs server
     create_server: true
+    # specify host path for creating internal nfs
+    storage_path: "/var/dkubex"
+    internal_nfs_node_selector:
+        node_selector_key: "kubernetes.io/os"
+        node_selector_value: "linux"
+        taint : ""
     # Format: <server ip>:<path>
     nfs_server: "kubernetes:/"
-    # specify host path for creating local nfs
-    storage_path: "/var/dkubex"
     # specify nfs version supported are 4.1 and 4.0
     version: "4.1"
 hostpath:
@@ -140,3 +144,10 @@ controller:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
     node_taint: ""
+
+weka:
+    enabled: false
+    file_system_name: ""
+    ips: ""
+    username: ""
+    password : ""

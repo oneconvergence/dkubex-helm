@@ -151,3 +151,5 @@ weka:
     ips: ""
     username: ""
     password : ""
+workspace:
+    enabled: true

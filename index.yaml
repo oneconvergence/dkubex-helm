@@ -3,6 +3,16 @@ entries:
   dkubex:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-06-26T12:26:01.1848391+05:30"
+    description: A Helm chart for Kubernetes
+    digest: ea002bef593a2033f24bd4856d965d7aa7e5e58f2c852b76757b50f134a90573
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.37/dkubex-0.1.37.tgz
+    version: 0.1.37
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-05-16T16:36:28.579783127+05:30"
     description: A Helm chart for Kubernetes
     digest: 123cc6b42c15221d894b490a2c4b6346c26af0f5764fcd7b19665ac22186fe96
@@ -395,4 +405,4 @@ entries:
     urls:
     - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.2/securellm-0.2.tgz
     version: "0.2"
-generated: "2024-05-16T16:36:28.579939567+05:30"
+generated: "2024-06-26T12:26:01.185008574+05:30"

@@ -141,7 +141,7 @@ flyte:
 node_selector_label: "node.kubernetes.io/instance-type"
 pod_security_enforce: ""
 
-# Dkubex components/controllers will be scheduled into control-plane nodes.
+# Dkubex components/controllers will be scheduled onto control-plane nodes.
 control_plane:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"

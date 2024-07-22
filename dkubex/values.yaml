@@ -140,7 +140,14 @@ flyte:
     cert_arn : ""
 node_selector_label: "node.kubernetes.io/instance-type"
 pod_security_enforce: ""
-controller:
+
+# Dkubex components/controllers will be scheduled onto control-plane nodes.
+control_plane:
+    node_selector: "kubernetes.io/os"
+    node_selector_value: "linux"
+    node_taint: ""
+
+mlflow_controller:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
     node_taint: ""

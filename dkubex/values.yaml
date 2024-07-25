@@ -145,7 +145,8 @@ pod_security_enforce: ""
 control_plane:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
-    node_taint: ""
+    node_taint: "dkubex/controlplane=true:NoSchedule"
+    enabled: false
 
 mlflow_controller:
     node_selector: "kubernetes.io/os"

@@ -126,7 +126,8 @@ auth:
     allowed_role: "" #keycload allowed role name
     allowed_group: "" # keycload allowed group name
 
-mlflow: 
+mlflow:
+    replica_count : 1
     database_url: ""
     artifacts_destination: ""
     aws_access_key_id: ""

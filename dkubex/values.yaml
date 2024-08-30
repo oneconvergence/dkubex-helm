@@ -89,7 +89,7 @@ fm:
 
 # enables kubeflow for dkubex
 kubeflow:
-    enabled: true
+    enabled: false
 
 #enables sssd integration with dkubex can use sssd/ldap/local_ldap
 sssd:

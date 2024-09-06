@@ -28,7 +28,7 @@ spec:
       - name: securellm-dockerhub-secret
       containers:
       - name: main
-        image: dkubex123/securellm-fe:0.4
+        image: dkubex123/securellm-fe:0.5
         imagePullPolicy: Always
         envFrom:
         - secretRef:
@@ -55,6 +55,8 @@ spec:
           value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
           value: "{{ .Values.sllmAdminPassword }}"
+        - name: REPORTS_TYPE
+          value: "{{ .Values.reportsType }}"
 
 ---
 
@@ -92,14 +94,14 @@ spec:
       initContainers:
       - name: init
         command: ["/opt/db/migrate.sh"]
-        image: dkubex123/securellm-be:0.4
+        image: dkubex123/securellm-be:0.5
         imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: {{ .Values.supabase.db.secretName }}
       containers:
       - name: main
-        image: dkubex123/securellm-be:0.4
+        image: dkubex123/securellm-be:0.5
         imagePullPolicy: Always
         envFrom:
         - secretRef:

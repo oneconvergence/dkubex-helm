@@ -20,6 +20,7 @@ global:
 sllmAdminUser: "admin@dkubex.ai"
 sllmAdminPassword: ""
 sllmOpenaiKey: ""
+reportsType: "DEFAULT"
 
 imageCredentials:
   registry: "https://index.docker.io/v1/"

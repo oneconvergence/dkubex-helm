@@ -21,7 +21,7 @@ spec:
       - name: dockerhub-secret
       containers:
       - name: dkubex-uninstaller-hook
-        image: dkubex123/d3x-installer:{{ .Values.image_tag }}
+        image: {{ .Values.registry.username }}/d3x-installer:{{ .Values.image_tag }}
         imagePullPolicy: Always
         securityContext:
           privileged: true

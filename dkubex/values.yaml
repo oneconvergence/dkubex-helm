@@ -5,160 +5,194 @@
 app_namespace: "d3x"
 image_tag: "0.8.5"
 admin_password: "dkubex"
-provider : "dkubex" # dkubex/eks
+provider: "dkubex" # dkubex/eks
+
 eks:
-    autoscaler_arn : ""
-    cluster_name: "" 
+  autoscaler_arn: ""
+  cluster_name: ""
 
 # Docker registry for installation
 registry:
-    # Format: registry/[repo]
-    name: "docker.io/dkubex123"
+  # Format: registry/[repo]
+  name: "docker.io/dkubex123"
 
-    # Container registry username
-    username: ""
+  # Container registry username
+  username: ""
 
-    # Container registry password
-    password: ""
+  # Container registry password
+  password: ""
 
-# nfs or hostpath
+# Storage type can be "nfs" or "hostpath"
 storage_type: "nfs"
-nfs:
-    # true for creating internal nfs server
-    create_server: true
-    # specify host path for creating internal nfs
-    storage_path: "/var/dkubex"
-    internal_nfs_node_selector:
-        node_selector_key: "kubernetes.io/os"
-        node_selector_value: "linux"
-        taint : ""
-    # Format: <server ip>:<path>
-    nfs_server: "kubernetes:/"
-    # specify nfs version supported are 4.1 and 4.0
-    version: "4.1"
-hostpath:
-    # specify  host path 
-    storage_path: "/var/dkubex"
 
-#specify the home_nfs_server if the user home is different 
+nfs:
+  # true for creating internal NFS server
+  create_server: true
+
+  # Specify host path for creating internal NFS
+  storage_path: "/var/dkubex"
+
+  # Specify storage class. If both storage_path and storage_class are specified,
+  # storage_class takes precedence.
+  storage_class: ""
+
+  internal_nfs_node_selector:
+    node_selector_key: "kubernetes.io/os"
+    node_selector_value: "linux"
+    taint: ""
+
+  # Format: <server_ip>:<path>
+  nfs_server: "kubernetes:/"
+
+  # NFS version (supported: 4.1 or 4.0)
+  version: "4.1"
+
+hostpath:
+  # Specify host path for storage
+  storage_path: "/var/dkubex"
+
+# Specify the home NFS server if user home is different
 user_home_nfs_server: ""
-# specify nfs version for user home supported are 4.1 and 4.0
+
+# NFS version for user home (supported: 4.1 or 4.0)
 user_home_nfs_server_version: "4.1"
 
-wipe_data: false #delete data from the storage
-# Format: dialect+driver://username:password@host:port/database
+# Wipe data from the storage (true/false)
+wipe_data: false
+
+# Database URL in format: dialect+driver://username:password@host:port/database
 database_url: ""
+
+# Image pull policy for the containers
 image_pull_policy: "Always"
+
 loadbalancer:
-    enabled: false
-    eks:
-        name: "dkubex"
-        #aws cert arn
-        cert_arn : ""
-        cross_zone_lb: false
-        internal_lb: true
-        scheme: ""
-        subnets: ""
-        tags: ""
+  enabled: false
 
-# docker registry prifix
-reg_prefix : ""
+  eks:
+    name: "dkubex"
+    # AWS certificate ARN
+    cert_arn: ""
+    cross_zone_lb: false
+    internal_lb: true
+    scheme: ""
+    subnets: ""
+    tags: ""
 
-# enables gpu for dkubex
+# Docker registry prefix
+reg_prefix: ""
+
+# Enable intel GPU device plugin
+habana:
+  enabled: false
+
+# Enables GPU for dkubex
 gpu_operator:
-   enabled: false     
-   driver: false #install driver
-   toolkit: false #install toolkit
+  enabled: false
+  driver: false # Install driver
+  toolkit: false # Install toolkit
 
-# enables datadog  for dkubex   
+# Enables Datadog for dkubex
 datadog:
-   enabled: false     
-   site: ""                #Datadog site 
-   key: ""                 #datadog key
-   cluster_name: ""        #Set a unique cluster name to allow scoping hosts and Cluster Checks easily 
+  enabled: false
+  site: "" # Datadog site
+  key: "" # Datadog API key
+  cluster_name: "" # Unique cluster name for scoping hosts and Cluster Checks
 
-# enables fm for dkubex
+# Enables FM (File Manager) for dkubex
 fm:
-    enabled: true
-    s3:
-        enabled : false
-        bucket_name: ""     # Bucket is used for both s3-mount on fm-controller and weaviate s3 backup
-        weaviate_backup_path: ""
-        aws_access_key_id: ""
-        aws_access_secret: ""
+  enabled: true
 
-# enables kubeflow for dkubex
-kubeflow:
+  s3:
     enabled: false
-
-#enables sssd integration with dkubex can use sssd/ldap/local_ldap
-sssd:
-    enabled: true
-    type: ldap #sssd/ldap
-    ldap_server: 
-        #create local ldap server for user management
-        enabled: true
-        auto_user_add: true #this will add authenticated user to the ldap if user doesnot exist. 
-
-    #if ldap_server is not enabled details for ldap and sssd
-    #details of Ad when type is sssd and ldap server is not enabled
-    ad: ""
-    bind_password: ""
-    ou: ""
-    bind_user: ""
-    #details of ldap when type is ldap and ldap server is not enabled 
-    ldap_url: ""
-    ladap_search_base: ""
-
-
-#enables Oauth for dkubex, user can configure this from admin ui after installation too 
-auth:
-    enabled: false
-    provider: "github" #okta/github/azure/adfs/keycloak
-    issuer_url: ""
-    client_id: ""
-    client_secret: ""
-    redirect_url: "" #https://<IP/DOMAIN_NAME>:32443/oauth2/callback
-    organisation: ""
-    email_domain: "*"
-    azure_tenant: "" #tenent id for azure ad
-    realm: "" # realm for keycload
-    allowed_role: "" #keycload allowed role name
-    allowed_group: "" # keycload allowed group name
-
-mlflow:
-    replica_count : 1
-    database_url: ""
-    artifacts_destination: ""
+    bucket_name: "" # S3 bucket for FM and Weaviate backup
+    weaviate_backup_path: ""
     aws_access_key_id: ""
     aws_access_secret: ""
+
+# Enables Kubeflow for dkubex
+kubeflow:
+  enabled: false
+
+# Enables SSSD integration with dkubex (options: sssd/ldap/local_ldap)
+sssd:
+  enabled: true
+  type: ldap # sssd/ldap
+
+  ldap_server:
+    # Create local LDAP server for user management
+    enabled: true
+    auto_user_add: true # Automatically add authenticated users to LDAP if they do not exist
+
+  # Active Directory details when type is sssd and LDAP server is not enabled
+  ad: ""
+  bind_password: ""
+  ou: ""
+  bind_user: ""
+
+  # LDAP details when type is ldap and LDAP server is not enabled
+  ldap_url: ""
+  ldap_search_base: ""
+
+# Enables OAuth for dkubex (configurable from admin UI post-installation)
+auth:
+  enabled: false
+  provider: "github" # Options: okta/github/azure/adfs/keycloak
+  issuer_url: ""
+  client_id: ""
+  client_secret: ""
+  redirect_url: "" # e.g., https://<IP/DOMAIN_NAME>:32443/oauth2/callback
+  organisation: ""
+  email_domain: "*"
+  azure_tenant: "" # Tenant ID for Azure AD
+  realm: "" # Realm for Keycloak
+  allowed_role: "" # Allowed role name for Keycloak
+  allowed_group: "" # Allowed group name for Keycloak
+
+# Configuration for MLflow in dkubex
+mlflow:
+  replica_count: 1
+  database_url: ""
+  artifacts_destination: ""
+  aws_access_key_id: ""
+  aws_access_secret: ""
+
+# Flyte configuration for dkubex
 flyte:
-    enabled: false
-    accountNumber: #aws-account number
-    accountRegion: #aws-region
-    bucketName: #s3bucket name
-    d3xUrl: #external url to access d3x
-    cert_arn : ""
+  enabled: false
+  accountNumber: "" # AWS account number
+  accountRegion: "" # AWS region
+  bucketName: "" # S3 bucket name
+  d3xUrl: "" # External URL to access d3x
+  cert_arn: ""
+
+# Node selector label for dkubex pods
 node_selector_label: "node.kubernetes.io/instance-type"
+
+# Pod security enforcement settings
 pod_security_enforce: ""
 
-# Dkubex components/controllers will be scheduled onto control-plane nodes.
+# Dkubex components/controllers will be scheduled on control-plane nodes
 control_plane:
-    node_selector: "kubernetes.io/os"
-    node_selector_value: "linux"
-    node_taint: "dkubex/controlplane=true:NoSchedule"
-    enabled: false
+  node_selector: "kubernetes.io/os"
+  node_selector_value: "linux"
+  node_taint: "dkubex/controlplane=true:NoSchedule"
+  enabled: false
 
+# MLflow controller node configuration
 mlflow_controller:
-    node_selector: "kubernetes.io/os"
-    node_selector_value: "linux"
-    node_taint: ""
+  node_selector: "kubernetes.io/os"
+  node_selector_value: "linux"
+  node_taint: ""
 
+# Weka file system configuration for dkubex
 weka:
-    enabled: false
-    file_system_name: ""
-    ips: ""
-    username: ""
-    password : ""
+  enabled: false
+  file_system_name: ""
+  ips: ""
+  username: ""
+  password: ""
+
+# Workspace settings for dkubex
 workspace:
-    enabled: true
+  enabled: true

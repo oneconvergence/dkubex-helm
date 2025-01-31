@@ -1,22 +1,18 @@
 # Default values for dkubex.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-app_namespace: "d3x"
+namespace: "d3x"
 image_tag: "0.8.5"
-admin_password: "dkubex"
-provider : "dkubex" # dkubex/eks
-eks:
-    autoscaler_arn : ""
-    cluster_name: "" 
+admin_password: "inflectionai"
+provider : "intel" # rancher
 
 # Docker registry for installation
-registry:
+container_registry:
     # Format: registry/[repo]
-    name: "docker.io/dkubex123"
+    uri: "docker.io/dkubex123" #harbor URL
 
     # Container registry username
-    username: ""
+    username: "dkubex123"
 
     # Container registry password
     password: ""
@@ -43,80 +39,20 @@ hostpath:
     # specify  host path 
     storage_path: "/var/dkubex"
 
-#specify the home_nfs_server if the user home is different 
-user_home_nfs_server: ""
-# specify nfs version for user home supported are 4.1 and 4.0
-user_home_nfs_server_version: "4.1"
-
-wipe_data: false #delete data from the storage
 # Format: dialect+driver://username:password@host:port/database
 database_url: ""
 image_pull_policy: "Always"
-loadbalancer:
-    enabled: false
-    eks:
-        name: "dkubex"
-        #aws cert arn
-        cert_arn : ""
-        cross_zone_lb: false
-        internal_lb: true
-        scheme: ""
-        subnets: ""
-        tags: ""
 
-# docker registry prifix
-reg_prefix : ""
-
-# Enable intel GPU device plugin
-habana:
-  enabled: false
-
-# enables gpu for dkubex
-gpu_operator:
-   enabled: false     
+# gpu provider related settings
+gpu_provider: intel #nvidia
+intel:
+  install: false
+  habana_device_plugin: true
+  runtime_class_crd: true
+nvidia:
+   install: false
    driver: false #install driver
    toolkit: false #install toolkit
-
-# enables datadog  for dkubex   
-datadog:
-   enabled: false     
-   site: ""                #Datadog site 
-   key: ""                 #datadog key
-   cluster_name: ""        #Set a unique cluster name to allow scoping hosts and Cluster Checks easily 
-
-# enables fm for dkubex
-fm:
-    enabled: true
-    s3:
-        enabled : false
-        bucket_name: ""     # Bucket is used for both s3-mount on fm-controller and weaviate s3 backup
-        weaviate_backup_path: ""
-        aws_access_key_id: ""
-        aws_access_secret: ""
-
-# enables kubeflow for dkubex
-kubeflow:
-    enabled: false
-
-#enables sssd integration with dkubex can use sssd/ldap/local_ldap
-sssd:
-    enabled: true
-    type: ldap #sssd/ldap
-    ldap_server: 
-        #create local ldap server for user management
-        enabled: true
-        auto_user_add: true #this will add authenticated user to the ldap if user doesnot exist. 
-
-    #if ldap_server is not enabled details for ldap and sssd
-    #details of Ad when type is sssd and ldap server is not enabled
-    ad: ""
-    bind_password: ""
-    ou: ""
-    bind_user: ""
-    #details of ldap when type is ldap and ldap server is not enabled 
-    ldap_url: ""
-    ladap_search_base: ""
-
 
 #enables Oauth for dkubex, user can configure this from admin ui after installation too 
 auth:
@@ -133,39 +69,17 @@ auth:
     allowed_role: "" #keycload allowed role name
     allowed_group: "" # keycload allowed group name
 
-mlflow:
+model_registry:
     replica_count : 1
     database_url: ""
     artifacts_destination: ""
     aws_access_key_id: ""
     aws_access_secret: ""
-flyte:
-    enabled: false
-    accountNumber: #aws-account number
-    accountRegion: #aws-region
-    bucketName: #s3bucket name
-    d3xUrl: #external url to access d3x
-    cert_arn : ""
-node_selector_label: "node.kubernetes.io/instance-type"
-pod_security_enforce: ""
 
-# Dkubex components/controllers will be scheduled onto control-plane nodes.
+
+# inflai components/controllers will be scheduled onto control-plane nodes.
 control_plane:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
     node_taint: "dkubex/controlplane=true:NoSchedule"
     enabled: false
-
-mlflow_controller:
-    node_selector: "kubernetes.io/os"
-    node_selector_value: "linux"
-    node_taint: ""
-
-weka:
-    enabled: false
-    file_system_name: ""
-    ips: ""
-    username: ""
-    password : ""
-workspace:
-    enabled: true

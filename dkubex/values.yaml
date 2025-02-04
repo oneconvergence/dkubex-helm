@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 namespace: "d3x"
-image_tag: "0.8.5"
+image_tag: "infai"
 admin_password: "inflectionai"
 provider : "intel" # rancher
 
@@ -53,6 +53,11 @@ nvidia:
    install: false
    driver: false #install driver
    toolkit: false #install toolkit
+
+# checkpoint storage information
+production:
+    namespace: ""
+    checkpoints_pvc: ""
 
 #enables Oauth for dkubex, user can configure this from admin ui after installation too 
 auth:

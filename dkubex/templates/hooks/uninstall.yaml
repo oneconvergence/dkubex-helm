@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "dkubex-uninstaller-hook"
+  name: "infl-uninstaller-hook"
   namespace: {{ .Release.Namespace }}
   annotations:
     # This is what defines this resource as a hook. Without this line, the
@@ -13,14 +13,14 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: "dkubex-uninstaller-hook"
+      name: "infl-uninstaller-hook"
     spec:
       hostPID: true
       restartPolicy: Never
       imagePullSecrets:
       - name: dockerhub-secret
       containers:
-      - name: dkubex-uninstaller-hook
+      - name: uninstaller-hook
         image: dkubex123/d3x-installer:{{ .Values.image_tag }}
         imagePullPolicy: Always
         securityContext:
@@ -32,6 +32,6 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: dkubex-config
-      serviceAccountName: dkubex-deployer-sa
+            name: infl-config
+      serviceAccountName: infl-deployer-sa
 

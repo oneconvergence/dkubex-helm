@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "dkubex-upgrade-hook"
+  name: "infl-upgrade-hook"
   namespace: {{ .Release.Namespace }}
   annotations:
     # This is what defines this resource as a hook. Without this line, the
@@ -13,7 +13,7 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: "dkubex-upgrade-hook"
+      name: "infl-upgrade-hook"
     spec:
       hostPID: true
       restartPolicy: Never
@@ -32,6 +32,6 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: dkubex-config
-      serviceAccountName: dkubex-deployer-sa
+            name: infl-config
+      serviceAccountName: infl-deployer-sa
 

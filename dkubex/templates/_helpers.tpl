@@ -1,3 +1,3 @@
 {{- define "imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.registry.name (printf "%s:%s" .Values.registry.username .Values.registry.password | b64enc) | b64enc }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.container_registry.uri (printf "%s:%s" .Values.container_registry.username .Values.container_registry.password | b64enc) | b64enc }}
 {{- end }}

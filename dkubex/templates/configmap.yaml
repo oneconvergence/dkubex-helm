@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dkubex-config
+  name: infl-config
   namespace: {{ .Release.Namespace }}
 data: 
   config.yaml: |

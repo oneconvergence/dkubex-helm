@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "dkubex-installer"
+  name: "infl-installer"
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": post-install
@@ -11,14 +11,14 @@ spec:
   backoffLimit: 0
   template:
     metadata:
-      name: "dkubex-installer"
+      name: "infl-installer"
     spec:
       hostPID: true
       restartPolicy: Never
       imagePullSecrets:
       - name: dockerhub-secret
       containers:
-      - name: dkubex-installer
+      - name: infl-installer
         image: dkubex123/d3x-installer:{{ .Values.image_tag }}
         imagePullPolicy: Always
         securityContext:
@@ -33,6 +33,6 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: dkubex-config
+            name: infl-config
         
-      serviceAccountName: dkubex-deployer-sa
+      serviceAccountName: infl-deployer-sa

@@ -1,7 +1,7 @@
 # Default values for dkubex.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-namespace: "d3x"
+namespace: "infl"
 image_tag: "infai"
 admin_password: "inflectionai"
 provider : "intel" # rancher

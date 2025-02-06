@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.8.5"
+image_tag: "0.8.7.1"
 admin_password: "dkubex"
 provider : "dkubex" # dkubex/eks
 eks:
@@ -86,6 +86,12 @@ fm:
         weaviate_backup_path: ""
         aws_access_key_id: ""
         aws_access_secret: ""
+    weaviate:
+        api_key : ""
+        loadbalancer:
+            cert_arn : ""
+            enabled: false
+            name: "dkubex-weaviate"
 
 # enables kubeflow for dkubex
 kubeflow:
@@ -139,6 +145,7 @@ flyte:
     bucketName: #s3bucket name
     d3xUrl: #external url to access d3x
     cert_arn : ""
+    max_download_mbs: 10
 node_selector_label: "node.kubernetes.io/instance-type"
 pod_security_enforce: ""
 

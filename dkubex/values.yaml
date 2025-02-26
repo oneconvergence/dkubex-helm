@@ -59,6 +59,9 @@ production:
     namespace: ""
     checkpoints_pvc: ""
 
+# domain name configuration
+domain: ""
+
 #enables Oauth for dkubex, user can configure this from admin ui after installation too 
 auth:
     enabled: false
@@ -81,10 +84,16 @@ model_registry:
     aws_access_key_id: ""
     aws_access_secret: ""
 
-
 # inflai components/controllers will be scheduled onto control-plane nodes.
 control_plane:
     node_selector: "kubernetes.io/os"
-    node_selector_value: "linux"
-    node_taint: "dkubex/controlplane=true:NoSchedule"
+    node_selector_value: "linux, windows"
+    node_taint: "" # by default tolerates all the taints, format: "key=value:effect" or "key:effect"
     enabled: false
+
+packages:
+    knative: false
+    cert-manager: false
+    kserve: false
+    kourier: true
+

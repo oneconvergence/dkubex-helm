@@ -110,7 +110,7 @@ spec:
     - http:
         paths:
           - path: /api/securellm(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: securellm-be

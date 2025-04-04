@@ -2,6 +2,36 @@ apiVersion: v1
 entries:
   dkubex:
   - apiVersion: v2
+    appVersion: 0.8.7.1
+    created: "2025-02-06T15:37:36.698338155+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 915a77d9b8737c0dc96e8b1349b5ba8c55c44ea693ff0827f5569ad527de1bda
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.44/dkubex-0.1.44.tgz
+    version: 0.1.44
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-06T15:37:36.429735088+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 8b1e02ba61d9e5fac78e69c18aa97bc42d53a8ecbef5ccfde67180018ac40382
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.43/dkubex-0.1.43.tgz
+    version: 0.1.43
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-06T15:28:53.771963261+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 11a1a43ec499eb32d437698871b18573211a7a6b3028f3c3a0c5ef24963c3282
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.42/dkubex-0.1.42.tgz
+    version: 0.1.42
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2024-08-30T11:52:48.728213948+05:30"
     description: A Helm chart for Kubernetes
@@ -407,6 +437,19 @@ entries:
     version: "0.1"
   securellm:
   - apiVersion: v2
+    created: "2025-04-04T09:49:41.088106358Z"
+    dependencies:
+    - name: supabase
+      repository: ""
+      version: 0.0.3
+    description: Helm chart for installing SecureLLM Product.
+    digest: f3ec1eb841d72959a2457bb975e90e279013ac688422211ed10373a4a58639f6
+    name: securellm
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.5.1/securellm-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
     created: "2024-09-06T09:23:13.246426584Z"
     dependencies:
     - name: supabase
@@ -458,4 +501,4 @@ entries:
     urls:
     - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.2/securellm-0.2.tgz
     version: "0.2"
-generated: "2024-09-06T09:23:13.246945031Z"
+generated: "2025-04-04T09:49:41.088565202Z"

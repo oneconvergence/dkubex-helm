@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.8.7.1"
+image_tag: "0.8.8.1"
 admin_password: "dkubex"
 provider : "dkubex" # dkubex/eks
 eks:
@@ -109,6 +109,7 @@ sssd:
     #if ldap_server is not enabled details for ldap and sssd
     #details of Ad when type is sssd and ldap server is not enabled
     ad: ""
+    ldap_id_mapping: true
     bind_password: ""
     ou: ""
     bind_user: ""

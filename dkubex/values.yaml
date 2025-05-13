@@ -80,6 +80,9 @@ datadog:
 # enables fm for dkubex
 fm:
     enabled: true
+    node_selector: "kubernetes.io/os"
+    node_selector_value: "linux"
+    node_taint: "dkubex/fm=true:NoSchedule"
     s3:
         enabled : false
         bucket_name: ""     # Bucket is used for both s3-mount on fm-controller and weaviate s3 backup
@@ -115,7 +118,7 @@ sssd:
     bind_user: ""
     #details of ldap when type is ldap and ldap server is not enabled 
     ldap_url: ""
-    ladap_search_base: ""
+    ldap_search_base: ""
 
 
 #enables Oauth for dkubex, user can configure this from admin ui after installation too 
@@ -134,6 +137,7 @@ auth:
     allowed_group: "" # keycload allowed group name
 
 mlflow:
+    multi_user: true
     replica_count : 1
     database_url: ""
     artifacts_destination: ""

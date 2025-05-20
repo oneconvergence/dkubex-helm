@@ -82,7 +82,7 @@ fm:
     enabled: true
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
-    node_taint: "dkubex/fm=true:NoSchedule"
+    node_taint: "dkubex/fm"
     s3:
         enabled : false
         bucket_name: ""     # Bucket is used for both s3-mount on fm-controller and weaviate s3 backup
@@ -158,7 +158,7 @@ pod_security_enforce: ""
 control_plane:
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
-    node_taint: "dkubex/controlplane=true:NoSchedule"
+    node_taint: "dkubex/controlplane"
     enabled: false
 
 mlflow_controller:

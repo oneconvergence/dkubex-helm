@@ -55,6 +55,8 @@ spec:
           value: "user@dkubex.ai"
         - name: SLLM_USER_PASSWORD
           value: "{{ .Values.sllmAdminPassword }}"
+        - name: SLLM_ADMIN_USER
+          value: "{{ .Values.sllmAdminUser }}"
         - name: REPORTS_TYPE
           value: "{{ .Values.reportsType }}"
 

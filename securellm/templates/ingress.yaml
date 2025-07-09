@@ -10,8 +10,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-response-headers: Authorization, X-Auth-Request-Email
     nginx.ingress.kubernetes.io/auth-signin: https://$http_host/oauth2/start?rd=$escaped_request_uri
     nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.d3x.svc.cluster.local:4180/oauth2/auth
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "X-Frame-Options: SAMEORIGIN";
     {{- end }}
   labels:
     app.kubernetes.io/name: proxy
@@ -44,8 +42,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-response-headers: Authorization, X-Auth-Request-Email
     nginx.ingress.kubernetes.io/auth-signin: https://$http_host/oauth2/start?rd=$escaped_request_uri
     nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.d3x.svc.cluster.local:4180/oauth2/auth
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "X-Frame-Options: SAMEORIGIN";
     {{- end }}
   labels:
     app.kubernetes.io/name: chatbot

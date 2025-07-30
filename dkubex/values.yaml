@@ -76,7 +76,7 @@ datadog:
    site: ""                #Datadog site 
    key: ""                 #datadog key
    cluster_name: ""        #Set a unique cluster name to allow scoping hosts and Cluster Checks easily 
-   tags: ""                 #tags to be added to datadog value will be comma seperated value eg: "key1:val1,key2:val2"
+   tags: ""                #Tags to be added to datadog, value will be comma separated key:value pair eg: "key1:val1,key2:val2"
 
 # enables fm for dkubex
 fm:

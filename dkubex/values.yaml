@@ -139,6 +139,7 @@ auth:
 
 mlflow:
     multi_user: true
+    workers: 4
     replica_count : 1
     database_url: ""
     artifacts_destination: ""

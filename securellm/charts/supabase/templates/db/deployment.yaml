@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.db.podSecurityContext | nindent 8 }}
       initContainers:
       - name: init
-        image: bitnami/kubectl:1.25.9
+        image: dkubex123/kubectl:latest
         securityContext:
           runAsUser: 0
         env:

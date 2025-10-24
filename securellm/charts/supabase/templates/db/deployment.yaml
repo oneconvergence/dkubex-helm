@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.db.podSecurityContext | nindent 8 }}
       initContainers:
       - name: init
-        image: dkubex123/kubectl:latest
+        image: dkubex123/kubectl:1.34.1
         securityContext:
           runAsUser: 0
         env:

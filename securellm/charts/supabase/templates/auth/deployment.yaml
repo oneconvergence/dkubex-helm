@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.auth.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init-db
-          image: dkubex123/kubectl:latest
+          image: dkubex123/kubectl:1.34.1
           imagePullPolicy: IfNotPresent
           envFrom:
           - secretRef:

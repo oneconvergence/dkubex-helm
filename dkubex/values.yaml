@@ -10,6 +10,8 @@ eks:
     autoscaler_arn : ""
     cluster_name: "" 
 
+airgap: false # true/false
+
 # Docker registry for installation
 registry:
     # Format: registry/[repo]

@@ -23,8 +23,6 @@ spec:
       - name: dkubex-upgrade-hook
         image: dkubex123/d3x-installer:{{ .Values.image_tag }}
         imagePullPolicy: Always
-        securityContext:
-          privileged: true
         command: ["/bin/sh", "-c", "dxm upgrade-dkubex /etc/config/config.yaml"]
         volumeMounts:
         - name: config-volume

@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   dkubex:
   - apiVersion: v2
+    appVersion: "0.9"
+    created: "2026-02-17T16:14:23.298272078+05:30"
+    description: A Helm chart for Kubernetes
+    digest: cbe14ccb66082cdec48cbf80ad89df2ee0257f476530354c62ebf4d7fbaeb949
+    name: dkubex
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/dkubex-0.1.50/dkubex-0.1.50.tgz
+    version: 0.1.50
+  - apiVersion: v2
     appVersion: 0.8.9
     created: "2025-08-05T13:02:27.495172596+05:30"
     description: A Helm chart for Kubernetes
@@ -487,6 +497,19 @@ entries:
     version: "0.1"
   securellm:
   - apiVersion: v2
+    created: "2026-04-16T17:39:06.275215854+05:30"
+    dependencies:
+    - name: supabase
+      repository: ""
+      version: 0.0.3
+    description: Helm chart for installing SecureLLM Product.
+    digest: 33f6fd9e52d13bbe14ce58f9b76adf3d2bdc7aae14580d26d0596c8f8877e7a0
+    name: securellm
+    type: application
+    urls:
+    - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.7/securellm-0.7.tgz
+    version: "0.7"
+  - apiVersion: v2
     created: "2025-06-26T05:17:05.148360581Z"
     dependencies:
     - name: supabase
@@ -564,4 +587,4 @@ entries:
     urls:
     - https://github.com/oneconvergence/dkubex-helm/releases/download/securellm-0.2/securellm-0.2.tgz
     version: "0.2"
-generated: "2025-08-05T13:02:27.49807227+05:30"
+generated: "2026-04-16T17:39:06.276663034+05:30"

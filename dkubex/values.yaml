@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_namespace: "d3x"
-image_tag: "0.9"
+image_tag: "0.9.1"
 admin_password: "dkubex"
 provider : "dkubex" # dkubex/eks
 eks:
@@ -78,24 +78,12 @@ datadog:
    cluster_name: ""        #Set a unique cluster name to allow scoping hosts and Cluster Checks easily 
    tags: ""                #Tags to be added to datadog, value will be comma separated key:value pair eg: "key1:val1,key2:val2"
 
-# enables fm for dkubex
-fm:
+# enables ft for dkubex
+ft:
     enabled: true
     node_selector: "kubernetes.io/os"
     node_selector_value: "linux"
-    node_taint: "dkubex/fm"
-    s3:
-        enabled : false
-        bucket_name: ""     # Bucket is used for both s3-mount on fm-controller and weaviate s3 backup
-        weaviate_backup_path: ""
-        aws_access_key_id: ""
-        aws_access_secret: ""
-    weaviate:
-        api_key : ""
-        loadbalancer:
-            cert_arn : ""
-            enabled: false
-            name: "dkubex-weaviate"
+    node_taint: "dkubex/ft"
 
 # enables kubeflow for dkubex
 kubeflow:
